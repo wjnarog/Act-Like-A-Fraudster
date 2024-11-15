@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Estate Listings</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .listing {
+            border-bottom: 1px solid #ccc;
+            padding: 15px 0;
+        }
+        h2, h3 {
+            margin: 0;
+            color: #333;
+        }
+        p {
+            margin: 5px 0;
+        }
+        .price {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Listings</h1>
+    {% for listing in listings %}
+    <div class="listing">
+        <h2>{{ listing['address'] }}</h2> <!-- Updated from title to address -->
+        <p><span class="price">${{ listing['price'] }}</span></p>
+        <p>Location: {{ listing['location'] }}</p>
+        <p>Type: {{ listing['type'] }}</p> <!-- New field for type -->
+        <p>Lot Size: {{ listing['lot_size'] }}</p> <!-- New field for lot size -->
+        <p>Bedrooms: {{ listing['bedrooms'] }}</p>
+        <p>Bathrooms: {{ listing['bathrooms'] }}</p>
+        <p>Square Feet: {{ listing['square_feet'] }} sqft</p>
+        <p>Details: {{ listing['description'] }}</p>
+        {% for owner in owner %}
+        <div class="owner">
+            <h2>Owner: {{ owner['first_name'] }} {{ owner['last_name'] }}, {{ owner['age'] }}</h2>
+            <p>Email: {{ owner['email'] }}</p>
+            <p>Phone: {{ owner['phone'] }}</p>
+            <p>Address: {{ owner['street_address'] }}, {{ owner['city'] }}, {{ owner['state'] }} {{ owner['postal_code'] }}, {{ owner['country'] }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+    
+
+</body>
+</html>
