@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Real Estate Listings</title>
     <style>
+        div {
+            padding: 1em;
+        }
         body {
             font-family: Arial, sans-serif;
             background-color: #f2f2f2;
@@ -37,21 +40,29 @@
 <body>
 
 <div class="container">
-    <h1>Listings</h1>
+    <h1>Listings - Fraud Portal</h1>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <input type="text" placeholder="Search for an address">
+        <button>Search</button>
+    </div>
+
+    <h2>Search History</h2>
     {% for listing in listings %}
     <div class="listing">
-        <h2>{{ listing['address'] }}</h2> <!-- Updated from title to address -->
+        <h3>{{ listing['address'] }}</h3>
         <p><span class="price">${{ listing['price'] }}</span></p>
         <p>Location: {{ listing['location'] }}</p>
-        <p>Type: {{ listing['type'] }}</p> <!-- New field for type -->
-        <p>Lot Size: {{ listing['lot_size'] }}</p> <!-- New field for lot size -->
+        <p>Type: {{ listing['type'] }}</p>
+        <p>Lot Size: {{ listing['lot_size'] }}</p>
         <p>Bedrooms: {{ listing['bedrooms'] }}</p>
         <p>Bathrooms: {{ listing['bathrooms'] }}</p>
         <p>Square Feet: {{ listing['square_feet'] }} sqft</p>
         <p>Details: {{ listing['description'] }}</p>
         {% for owner in owner %}
         <div class="owner">
-            <h2>Owner: {{ owner['first_name'] }} {{ owner['last_name'] }}, {{ owner['age'] }}</h2>
+            <h3>Owner: {{ owner['first_name'] }} {{ owner['last_name'] }}, {{ owner['age'] }}</h3>
             <p>Email: {{ owner['email'] }}</p>
             <p>Phone: {{ owner['phone'] }}</p>
             <p>Address: {{ owner['street_address'] }}, {{ owner['city'] }}, {{ owner['state'] }} {{ owner['postal_code'] }}, {{ owner['country'] }}</p>

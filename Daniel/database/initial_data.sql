@@ -8,7 +8,7 @@ VALUES (
     '5.1 acres',
     0,
     0,
-    0
+    
 );
 
 INSERT INTO owner (first_name, last_name, age, email, phone, street_address, city, state, postal_code, country)
