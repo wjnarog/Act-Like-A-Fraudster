@@ -68,6 +68,17 @@
             <p>Address: {{ owner['street_address'] }}, {{ owner['city'] }}, {{ owner['state'] }} {{ owner['postal_code'] }}, {{ owner['country'] }}</p>
         </div>
         {% endfor %}
+        <!-- Google Maps API -->
+        <iframe
+            width="600"
+            height="450"
+            style="border:0"
+            loading="lazy"
+            allowfullscreen
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCXrZNJxAR28EnVcjvadkXxwL2knscw4Ic
+            &q={{ listing['address'] | replace(' ', '+') }}">
+        </iframe>
     </div>
     {% endfor %}
 </div>
