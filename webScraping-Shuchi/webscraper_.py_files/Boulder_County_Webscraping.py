@@ -31,7 +31,7 @@ def scrape_property_info(address_to_search):
 
     soup = BeautifulSoup(html, 'html.parser')
     # print(soup.prettify())
-    
+
     # --------------------------------------------
     # Property
     # --------------------------------------------
@@ -258,12 +258,12 @@ def scrape_property_info(address_to_search):
 
     for key, value in property_details.items():
         print(f"{key}: {value}")
-    
+
     driver.quit()
 
 
 # Main function to run the scraper
 if __name__ == "__main__":
-    # address = input("Enter the address to search for: ")
-    address = "8724 Elgin Dr Lafayette"
+    address = input("Enter the address to search for: ")
+    # address = "8724 Elgin Dr Lafayette"
     scrape_property_info(address)

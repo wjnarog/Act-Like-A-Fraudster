@@ -7,6 +7,7 @@ from selenium.webdriver.support.ui import Select
 from bs4 import BeautifulSoup
 import re
 
+
 def scrape_property_info(address_to_search):
     # Initialize the Chrome WebDriver
     driver = webdriver.Chrome()
@@ -23,7 +24,8 @@ def scrape_property_info(address_to_search):
 
     # Wait for the table row containing the Parcel Number to be visible and clickable
     parcel_link = WebDriverWait(driver, 10).until(
-        EC.element_to_be_clickable((By.XPATH, "//table[@class='table']//tr[2]//td[1]//a"))
+        EC.element_to_be_clickable(
+            (By.XPATH, "//table[@class='table']//tr[2]//td[1]//a"))
     )
 
     # Click the Parcel Number link which opens a new tab
@@ -59,7 +61,7 @@ def scrape_property_info(address_to_search):
     # --------------------------------------------
     # Parcel ID and Owner Information
     # --------------------------------------------
-    
+
     print("Parcel ID and Owner Information: ")
     # Extract the Parcel Number using regex (13 digits)
     parcel_number_text = None
@@ -68,7 +70,8 @@ def scrape_property_info(address_to_search):
         # Search for a 13-digit number in the text
         match = re.search(r'\d{13}', parcel_number.text.strip())
         if match:
-            parcel_number_text = match.group(0)  # Extract the matched 13-digit number
+            # Extract the matched 13-digit number
+            parcel_number_text = match.group(0)
         else:
             parcel_number_text = "Parcel Number Not Found"
     else:
@@ -78,7 +81,8 @@ def scrape_property_info(address_to_search):
     owner_name = soup.find('span', {'id': 'ownerNameLabel'}).text.strip()
 
     # Extract Property Address
-    property_address = soup.find('td', {'id': 'propertyContentCell'}).text.strip()
+    property_address = soup.find(
+        'td', {'id': 'propertyContentCell'}).text.strip()
 
     # Create a dictionary to store the data
     property_data = {
@@ -101,19 +105,22 @@ def scrape_property_info(address_to_search):
     # Extract Legal Description
     legal_description_section = soup.find('div', {'id': 'Panel'})
     if legal_description_section:
-        legal_description = legal_description_section.find_next('div', {'class': 'SingleValueBoxElement'})
+        legal_description = legal_description_section.find_next(
+            'div', {'class': 'SingleValueBoxElement'})
         if legal_description:
             legal_description = legal_description.text.strip()
 
     # Extract Subdivision Plat
     subdivision_plat_section = soup.find('span', string="Subdivision Plat")
     if subdivision_plat_section:
-        subdivision_plat = subdivision_plat_section.find_next('div', {'class': 'SingleValueBoxElement'})
+        subdivision_plat = subdivision_plat_section.find_next(
+            'div', {'class': 'SingleValueBoxElement'})
         if subdivision_plat:
             subdivision_plat = subdivision_plat.text.strip()
 
     # Extract Account Summary Table
-    account_summary_table = soup.find('div', {'class': 'TaxAccountSummary'}).find('table')
+    account_summary_table = soup.find(
+        'div', {'class': 'TaxAccountSummary'}).find('table')
 
     if account_summary_table:
         # Extract row data from the table
@@ -134,18 +141,17 @@ def scrape_property_info(address_to_search):
 
     # Output the dictionary, printing each item on a new line
     for key, value in property_data.items():
-        if isinstance(value, dict): 
+        if isinstance(value, dict):
             print(f"{key}:")
             for sub_key, sub_value in value.items():
                 print(f"  {sub_key}: {sub_value}")
         else:
             print(f"{key}: {value}")
 
-    
     # --------------------------------------------
     # Permits
     # --------------------------------------------
-    
+
     print("\nPermits:")
     permits = {}
 
@@ -153,16 +159,16 @@ def scrape_property_info(address_to_search):
     permit_cases_value = "Not Available"  # Default value
 
     if permit_cases_section:
-        permit_cases_value = permit_cases_section.find_next('div', {'class': 'MultiValueBoxElement'})
+        permit_cases_value = permit_cases_section.find_next(
+            'div', {'class': 'MultiValueBoxElement'})
         if permit_cases_value:
             permit_cases_value = permit_cases_value.text.strip()
-
 
     permits["Permit Cases"] = permit_cases_value
 
     # Output the dictionary
     for key, value in permits.items():
-        if isinstance(value, dict): 
+        if isinstance(value, dict):
             print(f"{key}:")
             for sub_key, sub_value in value.items():
                 print(f"  {sub_key}: {sub_value}")
@@ -172,9 +178,10 @@ def scrape_property_info(address_to_search):
     # --------------------------------------------
     # Sales Summary
     # --------------------------------------------
-    
+
     print("\nSales Summary:")
-    sales_table = soup.find('table', rules='all', border="2", style="border-width:2px;border-style:Double;width:100%;page-break-inside:avoid;")
+    sales_table = soup.find('table', rules='all', border="2",
+                            style="border-width:2px;border-style:Double;width:100%;page-break-inside:avoid;")
     rows = sales_table.find_all('tr')[1:]
     sale_data = []
     for row in rows:
@@ -203,7 +210,7 @@ def scrape_property_info(address_to_search):
     # --------------------------------------------
     # Building Summary
     # --------------------------------------------
-    
+
     print("Building Summary:")
     building_section = soup.find('span', {'class': 'BuildingSummary'})
 
@@ -222,48 +229,61 @@ def scrape_property_info(address_to_search):
                 value = cells[1].get_text(strip=True)
                 building_data[label] = value
 
-
     for key, value in building_data.items():
         print(f"{key} {value}")
-        
+
     # --------------------------------------------
     # Valuation Summary
     # --------------------------------------------
-    
+
     print("\nValuation Summary:")
     land_valuation_data = {}
     land_valuation_section = soup.find('span', string="Land Valuation Summary")
     if land_valuation_section:
-        land_valuation_table = land_valuation_section.find_next('table', {'rules': 'all'})
+        land_valuation_table = land_valuation_section.find_next(
+            'table', {'rules': 'all'})
         if land_valuation_table:
             rows = land_valuation_table.find_all('tr')[1:]
             for row in rows:
                 columns = row.find_all('td')
                 if len(columns) > 0:
                     if columns[0].text.strip() and columns[0].text.strip() != "Land Subtotal:":
-                        land_valuation_data["Account Number"] = columns[0].text.strip()
-                        land_valuation_data["Land Type"] = columns[1].text.strip()
-                        land_valuation_data["Unit of Measure"] = columns[2].text.strip()
-                        land_valuation_data["Number of Units"] = columns[3].text.strip()
-                        land_valuation_data["Fire District"] = columns[4].text.strip()
-                        land_valuation_data["School District"] = columns[5].text.strip()
+                        land_valuation_data["Account Number"] = columns[0].text.strip(
+                        )
+                        land_valuation_data["Land Type"] = columns[1].text.strip(
+                        )
+                        land_valuation_data["Unit of Measure"] = columns[2].text.strip(
+                        )
+                        land_valuation_data["Number of Units"] = columns[3].text.strip(
+                        )
+                        land_valuation_data["Fire District"] = columns[4].text.strip(
+                        )
+                        land_valuation_data["School District"] = columns[5].text.strip(
+                        )
                         land_valuation_data["Vacant/Improved"] = columns[6].text.strip()
-                        land_valuation_data["Actual Value"] = columns[7].text.strip()
-                        land_valuation_data["Assessed Value"] = columns[8].text.strip()
+                        land_valuation_data["Actual Value"] = columns[7].text.strip(
+                        )
+                        land_valuation_data["Assessed Value"] = columns[8].text.strip(
+                        )
 
     improvements_valuation_data = {}
-    improvements_valuation_section = soup.find('span', string="Improvements Valuation Summary")
+    improvements_valuation_section = soup.find(
+        'span', string="Improvements Valuation Summary")
     if improvements_valuation_section:
-        improvements_valuation_table = improvements_valuation_section.find_next('table', {'rules': 'all'})
+        improvements_valuation_table = improvements_valuation_section.find_next('table', {
+                                                                                'rules': 'all'})
         if improvements_valuation_table:
             rows = improvements_valuation_table.find_all('tr')[1:]
             for row in rows:
                 columns = row.find_all('td')
                 if len(columns) > 1:
                     if columns[0].text.strip() and columns[0].text.strip() != "Improvements Subtotal:":
-                        improvements_valuation_data["Account Number"] = columns[0].text.strip()
-                        improvements_valuation_data["Actual Value"] = columns[1].text.strip()
-                        improvements_valuation_data["Assessed Value"] = columns[2].text.strip()
+                        improvements_valuation_data["Account Number"] = columns[0].text.strip(
+                        )
+                        improvements_valuation_data["Actual Value"] = columns[1].text.strip(
+                        )
+                        improvements_valuation_data["Assessed Value"] = columns[2].text.strip(
+                        )
 
     valuation_data = {
         "Land Valuation Summary": land_valuation_data,
@@ -278,21 +298,24 @@ def scrape_property_info(address_to_search):
         else:
             print(f"  {value}")
         print()
-    
+
     # --------------------------------------------
     # Enterprise Zone Summary
     # --------------------------------------------
     print("Enterprise Zone Summary:")
     # Find the div containing the "Property within Enterprise Zone" section
-    enterprise_zone_section = soup.find('span', {'class': 'EnterpriseZoneSection'})
+    enterprise_zone_section = soup.find(
+        'span', {'class': 'EnterpriseZoneSection'})
 
     enterprise_zone_data = {}
 
     # Extract the title of the section (e.g., "Property within Enterprise Zone")
-    title = enterprise_zone_section.find('span', {'id': 'Label'}).get_text(strip=True)
+    title = enterprise_zone_section.find(
+        'span', {'id': 'Label'}).get_text(strip=True)
 
     # Extract the value (True/False) from the "SingleValueBoxElement" div
-    value = enterprise_zone_section.find('div', {'class': 'SingleValueBoxElement'}).find('span').get_text(strip=True)
+    value = enterprise_zone_section.find(
+        'div', {'class': 'SingleValueBoxElement'}).find('span').get_text(strip=True)
 
     # Store the key-value pair in the dictionary
     enterprise_zone_data[title] = value
@@ -300,14 +323,15 @@ def scrape_property_info(address_to_search):
     # Output the results
     for key, value in enterprise_zone_data.items():
         print(f"{key}: {value}")
-    
+
     # --------------------------------------------
     # Precincts and Legislative Representatives Summary
     # --------------------------------------------
-    
+
     print("\nPrecincts and Legislative Representatives Summary: ")
     representatives_data = {}
-    representative_sections = soup.find_all('span', class_='PrecinctsLegislativeRepresentatives')
+    representative_sections = soup.find_all(
+        'span', class_='PrecinctsLegislativeRepresentatives')
     for section in representative_sections:
         label_span = section.find('span', id='Label')
         if label_span:
@@ -323,9 +347,11 @@ def scrape_property_info(address_to_search):
                     link_to_rep = columns[1].find('a')['href']
                     if title not in representatives_data:
                         representatives_data[title] = []
-                    representatives_data[title].append({'District': district, 'Link': link_to_rep})
+                    representatives_data[title].append(
+                        {'District': district, 'Link': link_to_rep})
 
-        precinct_section = section.find('span', style="font-family:VERDANA, ARIAL, HELVETICA, SANS-SERIF;font-size:10pt;font-weight:normal;color:#000000;")
+        precinct_section = section.find(
+            'span', style="font-family:VERDANA, ARIAL, HELVETICA, SANS-SERIF;font-size:10pt;font-weight:normal;color:#000000;")
         if precinct_section:
             precinct_value = precinct_section.text.strip()
             if title not in representatives_data:
@@ -342,12 +368,11 @@ def scrape_property_info(address_to_search):
             if 'Precinct' in rep:
                 print(f"  Precinct: {rep['Precinct']}")
             print()
-    
-    
+
     # --------------------------------------------
     # Zoning Section
     # --------------------------------------------
-    
+
     print("Zoning Summary:")
     zoning_section = soup.find('div', {'class': 'ZoningSummary'})
     zoning_data = {}
@@ -363,14 +388,12 @@ def scrape_property_info(address_to_search):
 
     for key, value in zoning_data.items():
         print(f"{key}: {value}")
-        
+
     # Close the driver after scraping
     driver.quit()
+
 
 # Main function to run the scraper
 if __name__ == "__main__":
     address = input("Enter the address to search for: ")
     scrape_property_info(address)
-
-
-

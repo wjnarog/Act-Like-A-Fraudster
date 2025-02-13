@@ -7,6 +7,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from bs4 import BeautifulSoup
 import time
 
+
 def scrape_property_info(address_to_search):
     # Initialize the browser
     driver = webdriver.Chrome()
@@ -21,7 +22,8 @@ def scrape_property_info(address_to_search):
 
     # Locate the search box using the class name
     search_box = WebDriverWait(driver, 20).until(
-        EC.element_to_be_clickable((By.CLASS_NAME, "multiselect-search"))  # Adjust if needed
+        EC.element_to_be_clickable(
+            (By.CLASS_NAME, "multiselect-search"))  # Adjust if needed
     )
 
     # Ensure the input is in view and interactable
@@ -34,22 +36,26 @@ def scrape_property_info(address_to_search):
 
     # Wait for the initial results container to load
     WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.CLASS_NAME, "placard-container"))  # Adjust as necessary
+        EC.presence_of_element_located(
+            (By.CLASS_NAME, "placard-container"))  # Adjust as necessary
     )
 
     # Scroll to trigger more content loading if necessary
     def scroll_to_load_more():
-        last_height = driver.execute_script("return document.body.scrollHeight")
-        
+        last_height = driver.execute_script(
+            "return document.body.scrollHeight")
+
         while True:
             # Scroll down to the bottom
-            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            
+            driver.execute_script(
+                "window.scrollTo(0, document.body.scrollHeight);")
+
             # Wait for new content to load
             time.sleep(3)  # Adjust sleep time if necessary
-            
+
             # Calculate new scroll height and compare with the last height
-            new_height = driver.execute_script("return document.body.scrollHeight")
+            new_height = driver.execute_script(
+                "return document.body.scrollHeight")
             if new_height == last_height:
                 break  # No more content to load
             last_height = new_height
@@ -62,11 +68,11 @@ def scrape_property_info(address_to_search):
 
     # Parse the page with BeautifulSoup
     soup = BeautifulSoup(page_source, 'html.parser')
-    
+
     # --------------------------------------------
     # Overview
     # --------------------------------------------
-    
+
     print("Overview:")
 
     # Initialize an empty dictionary to store the property information
@@ -81,21 +87,24 @@ def scrape_property_info(address_to_search):
         property_info['price'] = "Not listed for sale"
 
     # Extract address
-    address_element = soup.find('span', {'class': 'property-info-address-main'})
+    address_element = soup.find(
+        'span', {'class': 'property-info-address-main'})
     if address_element:
         property_info['address'] = address_element.text.strip()
     else:
         property_info['address'] = "Address not available"
 
     # Extract city, state, and zip code
-    city_state_zip_element = soup.find('span', {'class': 'property-info-address-citystatezip'})
+    city_state_zip_element = soup.find(
+        'span', {'class': 'property-info-address-citystatezip'})
     if city_state_zip_element:
         property_info['city_state_zip'] = city_state_zip_element.text.strip()
     else:
         property_info['city_state_zip'] = "City, State, Zip not available"
 
     # Extract estimated payment
-    estimated_payment_element = soup.find('p', {'class': 'property-estimated-info'})
+    estimated_payment_element = soup.find(
+        'p', {'class': 'property-estimated-info'})
     if estimated_payment_element:
         property_info['estimated_payment'] = estimated_payment_element.text.strip()
     else:
@@ -113,7 +122,8 @@ def scrape_property_info(address_to_search):
     features = soup.find_all('span', {'class': 'property-info-feature-detail'})
     for feature in features:
         feature_value = feature.text.strip()
-        feature_label = feature.find_previous('span', {'class': 'property-info-feature'}).text if feature.find_previous('span', {'class': 'property-info-feature'}) else ""
+        feature_label = feature.find_previous(
+            'span', {'class': 'property-info-feature'}).text if feature.find_previous('span', {'class': 'property-info-feature'}) else ""
 
         if 'Beds' in feature_label:
             property_info['beds'] = feature_value
@@ -131,9 +141,9 @@ def scrape_property_info(address_to_search):
     # --------------------------------------------
     # Highlights
     # --------------------------------------------
-    
+
     print("\nHightlights:")
-    
+
     # Find the highlights section
     highlights_section = soup.find('section', {'id': 'highlights-section'})
 
@@ -143,33 +153,37 @@ def scrape_property_info(address_to_search):
         # Extract the highlight features
         highlights_list = highlights_section.find_all('li', class_='highlight')
         for highlight in highlights_list:
-            feature = highlight.find('span', class_='highlight-value').text.strip()  # Get the feature name
-            highlights_info[feature] = feature  # The value can be the same as the key or customized if needed
+            # Get the feature name
+            feature = highlight.find(
+                'span', class_='highlight-value').text.strip()
+            # The value can be the same as the key or customized if needed
+            highlights_info[feature] = feature
 
         for key, value in highlights_info.items():
             # print(f"{key}: {value}")
             print(f"{key}")
     else:
         print("Highlight section not found on Homes.com for this property.")
-        
-    
+
     # --------------------------------------------
     # About this Home
     # --------------------------------------------
-    
+
     print("\nAbout this Home:")
     # Find the About This Home section
     about_section = soup.find('section', {'id': 'about'})
 
     if about_section:
         # Extract the property description
-        property_description = about_section.find('p', {'id': 'ldp-description-text'}).text.strip() if about_section.find('p', {'id': 'ldp-description-text'}) else "No description available"
+        property_description = about_section.find('p', {'id': 'ldp-description-text'}).text.strip(
+        ) if about_section.find('p', {'id': 'ldp-description-text'}) else "No description available"
 
         # Initialize the agent_info dictionary
         agent_info = {}
 
         # Extract agent name (if available)
-        agent_name_element = about_section.find('a', {'class': 'agent-information-fullname'})
+        agent_name_element = about_section.find(
+            'a', {'class': 'agent-information-fullname'})
         if agent_name_element:
             agent_name = agent_name_element.text.strip()
             agent_info['Agent Name'] = agent_name
@@ -177,7 +191,8 @@ def scrape_property_info(address_to_search):
             agent_info['Agent Name'] = "No agent information available"
 
         # Extract agency name (if available)
-        agency_name_element = about_section.find('span', {'class': 'agent-information-agency-name'})
+        agency_name_element = about_section.find(
+            'span', {'class': 'agent-information-agency-name'})
         if agency_name_element:
             agency_name = agency_name_element.text.strip()
             agent_info['Agency'] = agency_name
@@ -185,7 +200,8 @@ def scrape_property_info(address_to_search):
             agent_info['Agency'] = "No agency information available"
 
         # Extract contact info (if available)
-        contact_info_element = about_section.find('span', {'class': 'agent-information-idx-contact'})
+        contact_info_element = about_section.find(
+            'span', {'class': 'agent-information-idx-contact'})
         if contact_info_element:
             contact_info = contact_info_element.text.strip()
             agent_info['Contact Info'] = contact_info
@@ -193,7 +209,8 @@ def scrape_property_info(address_to_search):
             agent_info['Contact Info'] = "No contact info available"
 
         # Extract license number (if available)
-        license_number_element = about_section.find('span', {'class': 'agent-information-license-number'})
+        license_number_element = about_section.find(
+            'span', {'class': 'agent-information-license-number'})
         if license_number_element:
             license_number = license_number_element.text.strip()
             agent_info['License Number'] = license_number
@@ -201,7 +218,8 @@ def scrape_property_info(address_to_search):
             agent_info['License Number'] = "No license number available"
 
         # Extract agent image URL (if available)
-        agent_image_element = about_section.find('img', {'class': 'agent-brand-img'})
+        agent_image_element = about_section.find(
+            'img', {'class': 'agent-brand-img'})
         agent_image_url = agent_image_element['src'] if agent_image_element else "No agent image available"
 
         print("Property Description:")
@@ -213,14 +231,14 @@ def scrape_property_info(address_to_search):
 
         print("\nAgent Image URL:")
         print(agent_image_url)
-        
+
     else:
         print("About this home section not found on Homes.com for this property.")
-    
+
     # --------------------------------------------
     # Property Details
     # --------------------------------------------
-    
+
     print("\nProperty Details:")
     # Try to find the amenities section
     amenities_section = soup.find('section', {'id': 'amenities-container'})
@@ -229,25 +247,35 @@ def scrape_property_info(address_to_search):
         amenities_data = {}
 
         # Extract "Property Details" (inside the first feature-category)
-        property_details_section = amenities_section.find_all('div', {'class': 'feature-category feature-0'})[0]
+        property_details_section = amenities_section.find_all(
+            'div', {'class': 'feature-category feature-0'})[0]
         if property_details_section:
             # Find each subcategory within the "Property Details" section
-            subcategories = property_details_section.find_all('div', {'class': 'subcategory-container'})
+            subcategories = property_details_section.find_all(
+                'div', {'class': 'subcategory-container'})
             for subcategory in subcategories:
-                amenity_name = subcategory.find('p', {'class': 'amenity-name'}).text.strip()
-                amenities = subcategory.find('ul', {'class': 'amenities-list'}).find_all('li', {'class': 'amenities-detail'})
-                amenity_details = [amenity.text.strip() for amenity in amenities]
+                amenity_name = subcategory.find(
+                    'p', {'class': 'amenity-name'}).text.strip()
+                amenities = subcategory.find(
+                    'ul', {'class': 'amenities-list'}).find_all('li', {'class': 'amenities-detail'})
+                amenity_details = [amenity.text.strip()
+                                   for amenity in amenities]
                 amenities_data[amenity_name] = amenity_details
 
         # Extract "Community Details" (inside the second feature-category)
-        community_details_section = amenities_section.find_all('div', {'class': 'feature-category'})[0]
+        community_details_section = amenities_section.find_all(
+            'div', {'class': 'feature-category'})[0]
         if community_details_section:
             # Find each subcategory within the "Community Details" section
-            subcategories = community_details_section.find_all('div', {'class': 'subcategory-container'})
+            subcategories = community_details_section.find_all(
+                'div', {'class': 'subcategory-container'})
             for subcategory in subcategories:
-                amenity_name = subcategory.find('p', {'class': 'amenity-name'}).text.strip()
-                amenities = subcategory.find('ul', {'class': 'amenities-list'}).find_all('li', {'class': 'amenities-detail'})
-                amenity_details = [amenity.text.strip() for amenity in amenities]
+                amenity_name = subcategory.find(
+                    'p', {'class': 'amenity-name'}).text.strip()
+                amenities = subcategory.find(
+                    'ul', {'class': 'amenities-list'}).find_all('li', {'class': 'amenities-detail'})
+                amenity_details = [amenity.text.strip()
+                                   for amenity in amenities]
                 amenities_data[amenity_name] = amenity_details
 
         for key, value in amenities_data.items():
@@ -256,44 +284,51 @@ def scrape_property_info(address_to_search):
                 print(f"   {item}")
     else:
         print("Amenities section not found on Homes.com for this property.")
-    
-    
+
     # --------------------------------------------
     # About the Neighborhood
     # --------------------------------------------
-    
+
     print("\nAbout the Nieghborhood:")
-    
+
     # Try to find the "About South Littleton" section
-    neighborhood_section = soup.find('section', {'id': 'neighborhood-container'})
+    neighborhood_section = soup.find(
+        'section', {'id': 'neighborhood-container'})
 
     if neighborhood_section:
         # Extract the Neighborhood Description
-        description = neighborhood_section.find('div', {'id': 'neighborhood-description'})
-        neighborhood_description = description.text.strip() if description else "No description available."
+        description = neighborhood_section.find(
+            'div', {'id': 'neighborhood-description'})
+        neighborhood_description = description.text.strip(
+        ) if description else "No description available."
 
         # Extract the Neighborhood KPI
-        neighborhood_kpi_cards = neighborhood_section.find_all('div', {'class': 'neighborhood-kpi-card'})
+        neighborhood_kpi_cards = neighborhood_section.find_all(
+            'div', {'class': 'neighborhood-kpi-card'})
         kpi_data = {}
         for card in neighborhood_kpi_cards:
-            title = card.find('p', {'class': 'neighborhood-kpi-card-title'}).text.strip()
-            value = card.find('p', {'class': 'neighborhood-kpi-card-text'}).text.strip()
+            title = card.find(
+                'p', {'class': 'neighborhood-kpi-card-title'}).text.strip()
+            value = card.find(
+                'p', {'class': 'neighborhood-kpi-card-text'}).text.strip()
             kpi_data[title] = value
-        
+
         # Print the Neighborhood KPI
         print("Neighborhood Key Performance Indicators:")
         for key, value in kpi_data.items():
             print(f"{key}: {value}")
-        
+
         # Extract Neighborhood Image URLs
-        neighborhood_images = neighborhood_section.find_all('div', {'class': 'neighborhood-image-container'})
+        neighborhood_images = neighborhood_section.find_all(
+            'div', {'class': 'neighborhood-image-container'})
         image_urls = []
         for image_container in neighborhood_images:
             # Use Selenium to get the actual image URLs from the 'src' attribute
-            img_tag = image_container.find('img', {'class': 'neighborhood-image'})
+            img_tag = image_container.find(
+                'img', {'class': 'neighborhood-image'})
             if img_tag:
                 image_urls.append(img_tag['src'])
-        
+
         # Print the Neighborhood Image URLs
         print("\nNeighborhood Image URLs:")
         for i, url in enumerate(image_urls, start=1):
@@ -302,13 +337,12 @@ def scrape_property_info(address_to_search):
     else:
         print("Neighborhood details not found on Homes.com for this property.")
 
-    
     # --------------------------------------------
     # Property History
     # --------------------------------------------
-    
+
     print("\nProperty History:")
-    
+
     # Find the property history table
     price_history_table = soup.find('table', {'class': 'price-table'})
 
@@ -327,7 +361,7 @@ def scrape_property_info(address_to_search):
             price = row.find('td', {'class': 'price-price'})
             change = row.find('td', {'class': 'price-change'})
             sq_ft_price = row.find('td', {'class': 'price-sq-ft'})
-            
+
             # Create a dictionary to store the key:value pairs for this row
             history_entry = {
                 "Date": date.text.strip() if date else "N/A",
@@ -336,38 +370,41 @@ def scrape_property_info(address_to_search):
                 "Change": change.text.strip() if change else "N/A",
                 "Sq Ft Price": sq_ft_price.text.strip() if sq_ft_price else "N/A"
             }
-            
+
             # Append the dictionary to the list
             property_history_data.append(history_entry)
 
         for entry in property_history_data:
             for key, value in entry.items():
                 print(f"{key}: {value}")
-            print()  
+            print()
 
     else:
         print("Property history not found on Homes.com for this property.")
-    
+
     # --------------------------------------------
     # About the Listing Agent
     # --------------------------------------------
-    
+
     print("\nAbout the Listing Agent:")
-    
+
     # Extract agent's name
     agent_name = soup.find('a', {'class': 'agent-name'})
     if agent_name:
         agent_info = {}
-        
-        agent_info["Agent Name"] = agent_name.text.strip() if agent_name else "N/A"
+
+        agent_info["Agent Name"] = agent_name.text.strip(
+        ) if agent_name else "N/A"
 
         # Extract the brokerage information
         brokerage_info = soup.find('p', {'class': 'brokerage-info'})
-        agent_info["Brokerage"] = brokerage_info.text.strip() if brokerage_info else "N/A"
+        agent_info["Brokerage"] = brokerage_info.text.strip(
+        ) if brokerage_info else "N/A"
 
         # Extract the phone number
         phone_number = soup.find('a', {'class': 'agent-phone'})
-        agent_info["Phone Number"] = phone_number.text.strip() if phone_number else "N/A"
+        agent_info["Phone Number"] = phone_number.text.strip(
+        ) if phone_number else "N/A"
 
         # Extract the agent's bio
         agent_bio = soup.find('p', {'class': 'agent-bio'})
@@ -387,29 +424,32 @@ def scrape_property_info(address_to_search):
 
     else:
         print("Agent information not found on Homes.com for this property.")
-    
+
     # --------------------------------------------
     # Purchase History
     # --------------------------------------------
     print("\nDeed History:")
-    
+
     # Find the deed history section
-    deed_history_section = soup.find('section', {'id': 'deed-history-container'})
+    deed_history_section = soup.find(
+        'section', {'id': 'deed-history-container'})
     if deed_history_section:
         deed_history = {}
-        
+
         # Find the deed table
-        deed_table = deed_history_section.find('table', {'class': 'deed-table'})
+        deed_table = deed_history_section.find(
+            'table', {'class': 'deed-table'})
         if deed_table:
             # Find all rows in the deed table body
-            rows = deed_table.find_all('tr', {'class': 'table-body-row deed-table-body-row'})
-            
+            rows = deed_table.find_all(
+                'tr', {'class': 'table-body-row deed-table-body-row'})
+
             for row in rows:
                 # Extract date
                 date = row.find('th', {'scope': 'row'})
                 if date:
                     deed_history['Date'] = date.text.strip()
-                
+
                 # Extract buyer
                 buyer = row.find('td', {'class': 'deed-buyer'})
                 if buyer:
@@ -431,13 +471,13 @@ def scrape_property_info(address_to_search):
             print(f"{key}: {value}")
     else:
         print("\nDeed History not found on Homes.com for this property.")
-    
+
     # --------------------------------------------
     # Mortage History
     # --------------------------------------------
-    
+
     print("\nMortgage History:")
-    
+
     # Find all mortgage rows (each <tr> with class "table-body-row")
     mortgage_rows = soup.find_all('tr', class_='table-body-row')
 
@@ -469,13 +509,16 @@ def scrape_property_info(address_to_search):
             mortgage_data['Total Amount'] = amount.text.strip()
 
         # Extract detailed information from the property-history-drawer
-        mortgage_detail = mortgage_row.find('div', class_='property-history-drawer')
+        mortgage_detail = mortgage_row.find(
+            'div', class_='property-history-drawer')
 
         if mortgage_detail:
             # Extract Outstanding Balance
-            outstanding_balance = mortgage_detail.find('p', text="Outstanding Balance")
+            outstanding_balance = mortgage_detail.find(
+                'p', text="Outstanding Balance")
             if outstanding_balance:
-                mortgage_data['Outstanding Balance'] = outstanding_balance.find_next('p').text.strip()
+                mortgage_data['Outstanding Balance'] = outstanding_balance.find_next(
+                    'p').text.strip()
 
             # Extract Lender(s)
             lenders = mortgage_detail.find('p', text="Lender(s)")
@@ -485,22 +528,27 @@ def scrape_property_info(address_to_search):
             # Extract Loan Type
             loan_type = mortgage_detail.find('p', text="Loan Type")
             if loan_type:
-                mortgage_data['Loan Type'] = loan_type.find_next('p').text.strip()
+                mortgage_data['Loan Type'] = loan_type.find_next(
+                    'p').text.strip()
 
             # Extract Loan Term
             loan_term = mortgage_detail.find('p', text="Loan Term")
             if loan_term:
-                mortgage_data['Loan Term'] = loan_term.find_next('p').text.strip()
+                mortgage_data['Loan Term'] = loan_term.find_next(
+                    'p').text.strip()
 
             # Extract Interest Rate
             interest_rate = mortgage_detail.find('p', text="Interest Rate")
             if interest_rate:
-                mortgage_data['Interest Rate'] = interest_rate.find_next('p').text.strip()
+                mortgage_data['Interest Rate'] = interest_rate.find_next(
+                    'p').text.strip()
 
             # Extract Borrower(s) (if they are listed in the subtable)
-            borrowers_in_subtable = mortgage_detail.find('p', text="Borrower(s)")
+            borrowers_in_subtable = mortgage_detail.find(
+                'p', text="Borrower(s)")
             if borrowers_in_subtable:
-                mortgage_data['Borrowers in Subtable'] = borrowers_in_subtable.find_next('p').text.strip()
+                mortgage_data['Borrowers in Subtable'] = borrowers_in_subtable.find_next(
+                    'p').text.strip()
 
         # Append the extracted data for each row
         all_mortgage_data.append(mortgage_data)
@@ -516,13 +564,13 @@ def scrape_property_info(address_to_search):
     # --------------------------------------------
     # Tax History
     # --------------------------------------------
-    
+
     print("\nTax History:")
-    
+
     # Find the tax history table body
     tax_table_body = soup.find('tbody', class_='tax-table-body')
 
-    if tax_table_body :
+    if tax_table_body:
         # Find all the rows in the tax history table
         tax_rows = tax_table_body.find_all('tr', class_='table-body-row')
 
@@ -570,31 +618,37 @@ def scrape_property_info(address_to_search):
             print()
     else:
         print("Tax history not found on Homes.com for this property.")
-    
+
     # --------------------------------------------
     # Owner History
     # --------------------------------------------
-    
+
     print("\nOwner History:")
-    
+
     # Find the ownership history container
     ownership_history = soup.find('section', id='ownership-history-container')
 
     if ownership_history:
         # Find all the accordion wrappers containing the ownership data
-        accordion_wrappers = ownership_history.find_all('div', class_='accordion-wrapper')
+        accordion_wrappers = ownership_history.find_all(
+            'div', class_='accordion-wrapper')
 
         # Loop through each accordion-wrapper to extract the relevant ownership data
         for accordion_wrapper in accordion_wrappers:
             # Find the accordion button inside the current accordion-wrapper
-            accordion_button = accordion_wrapper.find('div', class_='accordion-button')
+            accordion_button = accordion_wrapper.find(
+                'div', class_='accordion-button')
 
             if accordion_button:
                 # Extract basic ownership information (Date, Name, Owned For, Owner Type)
-                date = accordion_button.find_all('span')[0].text.strip() if accordion_button.find_all('span') else "N/A"
-                name = accordion_button.find_all('span')[1].text.strip() if len(accordion_button.find_all('span')) > 1 else "N/A"
-                owned_for = accordion_button.find_all('span')[2].text.strip() if len(accordion_button.find_all('span')) > 2 else "N/A"
-                owner_type = accordion_button.find_all('span')[3].text.strip() if len(accordion_button.find_all('span')) > 3 else "N/A"
+                date = accordion_button.find_all('span')[0].text.strip(
+                ) if accordion_button.find_all('span') else "N/A"
+                name = accordion_button.find_all('span')[1].text.strip() if len(
+                    accordion_button.find_all('span')) > 1 else "N/A"
+                owned_for = accordion_button.find_all('span')[2].text.strip() if len(
+                    accordion_button.find_all('span')) > 2 else "N/A"
+                owner_type = accordion_button.find_all('span')[3].text.strip() if len(
+                    accordion_button.find_all('span')) > 3 else "N/A"
 
                 # Print basic ownership information
                 print("Basic Ownership Information:")
@@ -603,39 +657,63 @@ def scrape_property_info(address_to_search):
                 print(f"Owned For: {owned_for}")
                 print(f"Owner Type: {owner_type}")
                 print()
-                
 
                 # Extract Purchase Details
-                purchase_details_section = accordion_wrapper.find('div', id='purchase-details-ownership')
+                purchase_details_section = accordion_wrapper.find(
+                    'div', id='purchase-details-ownership')
                 purchase_details = {}
 
                 if purchase_details_section:
                     # Extract individual purchase details
-                    listed_on = purchase_details_section.find('div', string='Listed on')
-                    closed_on = purchase_details_section.find('div', string='Closed on')
-                    sold_by = purchase_details_section.find('div', string='Sold by')
-                    bought_by = purchase_details_section.find('div', string='Bought by')
-                    sellers_agent = purchase_details_section.find('div', string="Seller's Agent")
-                    buyers_agent = purchase_details_section.find('div', string="Buyer's Agent")
-                    list_price = purchase_details_section.find('div', string='List Price')
-                    sold_price = purchase_details_section.find('div', string='Sold Price')
-                    premium_discount = purchase_details_section.find('div', string='Premium/Discount to List')
-                    total_days_on_market = purchase_details_section.find('div', string='Total Days on Market')
-                    views = purchase_details_section.find('div', string='Views')
-                    current_estimated_value = purchase_details_section.find('div', string='Current Estimated Value')
+                    listed_on = purchase_details_section.find(
+                        'div', string='Listed on')
+                    closed_on = purchase_details_section.find(
+                        'div', string='Closed on')
+                    sold_by = purchase_details_section.find(
+                        'div', string='Sold by')
+                    bought_by = purchase_details_section.find(
+                        'div', string='Bought by')
+                    sellers_agent = purchase_details_section.find(
+                        'div', string="Seller's Agent")
+                    buyers_agent = purchase_details_section.find(
+                        'div', string="Buyer's Agent")
+                    list_price = purchase_details_section.find(
+                        'div', string='List Price')
+                    sold_price = purchase_details_section.find(
+                        'div', string='Sold Price')
+                    premium_discount = purchase_details_section.find(
+                        'div', string='Premium/Discount to List')
+                    total_days_on_market = purchase_details_section.find(
+                        'div', string='Total Days on Market')
+                    views = purchase_details_section.find(
+                        'div', string='Views')
+                    current_estimated_value = purchase_details_section.find(
+                        'div', string='Current Estimated Value')
 
-                    purchase_details['Listed on'] = listed_on.find_next('div', class_='ownership-category-value').text.strip() if listed_on else "N/A"
-                    purchase_details['Closed on'] = closed_on.find_next('div', class_='ownership-category-value').text.strip() if closed_on else "N/A"
-                    purchase_details['Sold by'] = sold_by.find_next('div', class_='ownership-category-value').text.strip() if sold_by else "N/A"
-                    purchase_details['Bought by'] = bought_by.find_next('div', class_='ownership-category-value').text.strip() if bought_by else "N/A"
-                    purchase_details['Seller\'s Agent'] = sellers_agent.find_next('div', class_='ownership-category-value').text.strip() if sellers_agent else "N/A"
-                    purchase_details['Buyer\'s Agent'] = buyers_agent.find_next('div', class_='ownership-category-value').text.strip() if buyers_agent else "N/A"
-                    purchase_details['List Price'] = list_price.find_next('div', class_='ownership-category-value').text.strip() if list_price else "N/A"
-                    purchase_details['Sold Price'] = sold_price.find_next('div', class_='ownership-category-value').text.strip() if sold_price else "N/A"
-                    purchase_details['Premium/Discount to List'] = premium_discount.find_next('div', class_='ownership-category-value').text.strip() if premium_discount else "N/A"
-                    purchase_details['Total Days on Market'] = total_days_on_market.find_next('div', class_='ownership-category-value').text.strip() if total_days_on_market else "N/A"
-                    purchase_details['Views'] = views.find_next('div', class_='ownership-category-value').text.strip() if views else "N/A"
-                    purchase_details['Current Estimated Value'] = current_estimated_value.find_next('div', class_='ownership-category-value').text.strip() if current_estimated_value else "N/A"
+                    purchase_details['Listed on'] = listed_on.find_next(
+                        'div', class_='ownership-category-value').text.strip() if listed_on else "N/A"
+                    purchase_details['Closed on'] = closed_on.find_next(
+                        'div', class_='ownership-category-value').text.strip() if closed_on else "N/A"
+                    purchase_details['Sold by'] = sold_by.find_next(
+                        'div', class_='ownership-category-value').text.strip() if sold_by else "N/A"
+                    purchase_details['Bought by'] = bought_by.find_next(
+                        'div', class_='ownership-category-value').text.strip() if bought_by else "N/A"
+                    purchase_details['Seller\'s Agent'] = sellers_agent.find_next(
+                        'div', class_='ownership-category-value').text.strip() if sellers_agent else "N/A"
+                    purchase_details['Buyer\'s Agent'] = buyers_agent.find_next(
+                        'div', class_='ownership-category-value').text.strip() if buyers_agent else "N/A"
+                    purchase_details['List Price'] = list_price.find_next(
+                        'div', class_='ownership-category-value').text.strip() if list_price else "N/A"
+                    purchase_details['Sold Price'] = sold_price.find_next(
+                        'div', class_='ownership-category-value').text.strip() if sold_price else "N/A"
+                    purchase_details['Premium/Discount to List'] = premium_discount.find_next(
+                        'div', class_='ownership-category-value').text.strip() if premium_discount else "N/A"
+                    purchase_details['Total Days on Market'] = total_days_on_market.find_next(
+                        'div', class_='ownership-category-value').text.strip() if total_days_on_market else "N/A"
+                    purchase_details['Views'] = views.find_next(
+                        'div', class_='ownership-category-value').text.strip() if views else "N/A"
+                    purchase_details['Current Estimated Value'] = current_estimated_value.find_next(
+                        'div', class_='ownership-category-value').text.strip() if current_estimated_value else "N/A"
 
                     # Print Purchase Details
                     print("Purchase Details:")
@@ -645,15 +723,20 @@ def scrape_property_info(address_to_search):
                     print("")
 
                 # Extract Home Financials
-                home_financials_section = accordion_wrapper.find('div', id='home-financials-ownership')
+                home_financials_section = accordion_wrapper.find(
+                    'div', id='home-financials-ownership')
                 home_financials = {}
 
                 if home_financials_section:
-                    original_mortgage = home_financials_section.find('div', string='Original Mortgage')
-                    interest_rate = home_financials_section.find('div', string='Interest Rate')
+                    original_mortgage = home_financials_section.find(
+                        'div', string='Original Mortgage')
+                    interest_rate = home_financials_section.find(
+                        'div', string='Interest Rate')
 
-                    home_financials['Original Mortgage'] = original_mortgage.find_next('div', class_='ownership-category-value').text.strip() if original_mortgage else "N/A"
-                    home_financials['Interest Rate'] = interest_rate.find_next('div', class_='ownership-category-value').text.strip() if interest_rate else "N/A"
+                    home_financials['Original Mortgage'] = original_mortgage.find_next(
+                        'div', class_='ownership-category-value').text.strip() if original_mortgage else "N/A"
+                    home_financials['Interest Rate'] = interest_rate.find_next(
+                        'div', class_='ownership-category-value').text.strip() if interest_rate else "N/A"
 
                     # Print Home Financials
                     print("Home Financials:")
@@ -667,23 +750,24 @@ def scrape_property_info(address_to_search):
     else:
         print("Ownership history not found on Homes.com for this property.")
 
-    
     # --------------------------------------------
     # MLS Information
     # --------------------------------------------
-    
+
     print("\nMLS Information:")
-    
+
     # Extract MLS Source
     mls_source = soup.find('span', {'class': 'heavy'})
 
     if mls_source:
         mls_info = {}
-        mls_info["MLS Source"] = mls_source.find_next('span').text.strip() if mls_source else "N/A"
+        mls_info["MLS Source"] = mls_source.find_next(
+            'span').text.strip() if mls_source else "N/A"
 
         # Extract MLS Number
         mls_number = soup.find('p', {'class': 'mls-number'})
-        mls_info["MLS Number"] = mls_number.find('span').find_next('span').text.strip() if mls_number else "N/A"
+        mls_info["MLS Number"] = mls_number.find('span').find_next(
+            'span').text.strip() if mls_number else "N/A"
 
         # Extract MLS Image URL
         mls_image = soup.find('img', {'class': 'mls-image'})
@@ -704,4 +788,3 @@ def scrape_property_info(address_to_search):
 if __name__ == "__main__":
     address = input("Enter the address to search for: ")
     scrape_property_info(" " + address)
-    

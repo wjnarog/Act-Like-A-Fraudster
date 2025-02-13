@@ -104,6 +104,6 @@ def scrape_property_info(address_to_search):
 
 # Main function to run the scraper
 if __name__ == "__main__":
-    # address = input("Enter the address to search for: ")
-    address = "831 Crescent Dr, Boulder, CO 80303"
+    address = input("Enter the address to search for: ")
+    # address = "831 Crescent Dr, Boulder, CO 80303"
     scrape_property_info(address)

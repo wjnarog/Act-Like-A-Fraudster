@@ -7,6 +7,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from bs4 import BeautifulSoup
 import time
 
+
 def scrape_county_info(county_to_search):
     # Initialize the browser
     driver = webdriver.Chrome()
@@ -21,7 +22,8 @@ def scrape_county_info(county_to_search):
 
     # Locate the search box using the class name
     search_box = WebDriverWait(driver, 20).until(
-        EC.element_to_be_clickable((By.CLASS_NAME, "multiselect-search"))  # Adjust if needed
+        EC.element_to_be_clickable(
+            (By.CLASS_NAME, "multiselect-search"))  # Adjust if needed
     )
 
     # Ensure the input is in view and interactable
@@ -33,7 +35,7 @@ def scrape_county_info(county_to_search):
 
     # Wait for the initial results container to load
     WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.ID, "placardContainer")) 
+        EC.presence_of_element_located((By.ID, "placardContainer"))
     )
 
     # Now capture the page source after the search has resulted in new content
@@ -41,7 +43,7 @@ def scrape_county_info(county_to_search):
 
     # Parse the page with BeautifulSoup
     soup = BeautifulSoup(page_source, 'html.parser')
-    
+
     # Extract the information from the placard-container
     property_list = []
 
@@ -73,7 +75,8 @@ def scrape_county_info(county_to_search):
         property_details['address'] = address
 
         # Extract the description of the property
-        description = placard.find('p', class_='property-description').text.strip()
+        description = placard.find(
+            'p', class_='property-description').text.strip()
         property_details['description'] = description
 
         agent = placard.find('div', class_='agent-info-container')
@@ -81,7 +84,8 @@ def scrape_county_info(county_to_search):
             # Extract agent information
             agent_name = placard.find('p', class_='agent-name').text.strip()
             agency_name = placard.find('p', class_='agency-name').text.strip()
-            agent_number = placard.find('p', class_='agency-number').text.strip()
+            agent_number = placard.find(
+                'p', class_='agency-number').text.strip()
 
             property_details['Agent Name'] = agent_name
             property_details['Agency Number'] = agency_name
@@ -98,8 +102,8 @@ def scrape_county_info(county_to_search):
 
     driver.quit()
 
-    
+
 # Main function to run the scraper
 if __name__ == "__main__":
     county = input("Enter the county to search for: ")
-    scrape_county_info(" " + county + " County")
+    scrape_county_info(" " + county)

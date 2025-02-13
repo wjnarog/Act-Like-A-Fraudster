@@ -47,12 +47,12 @@ def scrape_county_info(county_to_search):
 
     for index, address in enumerate(addresses, start=1):
         print(f"{index}. {address}")
-        
+
     driver.quit()
 
 
 # Main function to run the scraper
 if __name__ == "__main__":
-    # county = input("Enter the county to search for: ")
-    county = "boulder co"
+    county = input("Enter the county to search for: ")
+    # county = "boulder co"
     scrape_county_info(county)

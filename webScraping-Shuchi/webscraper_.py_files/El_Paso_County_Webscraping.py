@@ -5,6 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 
+
 def scrape_property_info(address_to_search):
     # Initialize the Chrome WebDriver and load the property search website
     driver = webdriver.Chrome()
@@ -36,14 +37,16 @@ def scrape_property_info(address_to_search):
 
     # Extract basic property details (address, owner, etc.)
     data_list_section = soup.find('div', class_='data-list-section')
-    data_rows = data_list_section.find_all('li', class_='clearfix data-list-row')
+    data_rows = data_list_section.find_all(
+        'li', class_='clearfix data-list-row')
     property_details = {}
 
     for row in data_rows:
         title = row.find('span', class_='title')
         value = row.find('span', class_='value') or row.find('select')
         if value:
-            value = value.find('option').text.strip() if value.find('option') else value.text.strip()
+            value = value.find('option').text.strip() if value.find(
+                'option') else value.text.strip()
         if title and value:
             property_details[title.text.strip().replace(':', '')] = value
 
@@ -117,8 +120,10 @@ def scrape_property_info(address_to_search):
     print(f"Building Details:")
     for section in sections:
         # Extract title and market value for each building section
-        section_title = section.find('h4', class_='panel-title').get_text(strip=True)
-        market_value = section.find('div', class_='building-value').find_all('span')[1].get_text(strip=True)
+        section_title = section.find(
+            'h4', class_='panel-title').get_text(strip=True)
+        market_value = section.find(
+            'div', class_='building-value').find_all('span')[1].get_text(strip=True)
         data_list = section.find('ul', class_='data-list')
         building_details = {}
 
@@ -131,9 +136,10 @@ def scrape_property_info(address_to_search):
 
                 if title_span:
                     title = title_span.get_text(strip=True)
-                    value = value_span.get_text(strip=True) if value_span else "-"
+                    value = value_span.get_text(
+                        strip=True) if value_span else "-"
                     building_details[title] = value
-        
+
         # Add market value to building details
         building_details['Market Value'] = market_value
 
@@ -169,25 +175,31 @@ def scrape_property_info(address_to_search):
             # Handle expanded sale details if available
             expand_row = columns[0].find('button')
             if expand_row:
-                expand_button = driver.find_element(By.XPATH, f"//button[text()='+']")
+                expand_button = driver.find_element(
+                    By.XPATH, f"//button[text()='+']")
                 expand_button.click()
                 WebDriverWait(driver, 10).until(
-                    EC.presence_of_element_located((By.CLASS_NAME, "table-row-subdata-content"))
+                    EC.presence_of_element_located(
+                        (By.CLASS_NAME, "table-row-subdata-content"))
                 )
 
                 # Refresh the page source and extract expanded data
                 page_source = driver.page_source
                 soup = BeautifulSoup(page_source, 'html.parser')
 
-                expanded_row = soup.find_all('tr', class_='hide table-row-subdata')
+                expanded_row = soup.find_all(
+                    'tr', class_='hide table-row-subdata')
                 if expanded_row:
                     subdata = expanded_row[0].find('ul', class_='data-list')
                     if subdata:
                         for item in subdata.find_all('li', class_='data-list-row'):
-                            data_items = item.find_all('p', class_='data-list-item')
+                            data_items = item.find_all(
+                                'p', class_='data-list-item')
                             for data_item in data_items:
-                                title_span = data_item.find('span', class_='title')
-                                value_span = data_item.find('span', class_='value')
+                                title_span = data_item.find(
+                                    'span', class_='title')
+                                value_span = data_item.find(
+                                    'span', class_='value')
 
                                 if title_span and value_span:
                                     title = title_span.get_text(strip=True)
@@ -199,7 +211,8 @@ def scrape_property_info(address_to_search):
                         if grantee_select:
                             selected_grantee = grantee_select.find('option')
                             if selected_grantee:
-                                sale_info['Grantee'] = selected_grantee.get_text(strip=True)
+                                sale_info['Grantee'] = selected_grantee.get_text(
+                                    strip=True)
 
             sales_data.append(sale_info)
 
@@ -218,7 +231,8 @@ def scrape_property_info(address_to_search):
     tax_levy_section = soup.find('div', {'id': 'taxandlevytab'})
 
     # Extract tax area code, levy year, and mill levy
-    tax_info = tax_levy_section.find_all('p')[1].get_text(strip=True).replace(':', ': ').replace('Levy Year', ' \n   Levy Year').replace('Mill Levy', '\n   Mill Levy')
+    tax_info = tax_levy_section.find_all('p')[1].get_text(strip=True).replace(
+        ':', ': ').replace('Levy Year', ' \n   Levy Year').replace('Mill Levy', '\n   Mill Levy')
     print(f"Tax Information: \n   {tax_info} \n")
 
     # Extract Taxing Entity table rows
@@ -260,6 +274,7 @@ def scrape_property_info(address_to_search):
 
     # Clean up and close the driver
     driver.quit()
+
 
 # Main function to run the scraper
 if __name__ == "__main__":
