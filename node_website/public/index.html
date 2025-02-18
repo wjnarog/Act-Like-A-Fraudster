@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Number Generator</title>
+</head>
+<body>
+    <h1>Random Number Generator</h1>
+    <button id="fetchRandomNumber">Get Random Number</button>
+    <form id="queryForm">
+        <label for="query">Search:</label>
+        <input type="text" id="query" name="query">
+        <button type="button" id="fetchInfo">Get Info</button>
+    </form>
+    <p id="result"></p>
+
+    <script>
+        document.getElementById('fetchRandomNumber').addEventListener('click', async () => {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/random');
+                const data = await response.json();
+                document.getElementById('result').textContent = `Random Number: ${data.number}`;
+            } catch (error) {
+                console.error('Error fetching random number:', error);
+                document.getElementById('result').textContent = 'Failed to fetch random number.';
+            }
+        });
+
+        document.getElementById('fetchInfo').addEventListener('click', async () => {
+            const query = document.getElementById('query').value;
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query }),
+                });
+                const data = await response.json();
+                document.getElementById('result').textContent = `Color: ${data.color}, Temperature: ${data.temperature}`;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                document.getElementById('result').textContent = 'Failed to fetch data.';
+            }
+        });
+    </script>
+</body>
+</html>
