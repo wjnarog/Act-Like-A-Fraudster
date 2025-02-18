@@ -1,0 +1,10 @@
+Steps to get node website set up
+
+1. Follow 1st 4 steps from here https://runjs.app/blog/how-to-start-a-node-server
+
+2. copy in given server.js files and /public files(make sure to copy index.html in public folder)
+
+3. use `node server.js` in the main website directory to run the webserver
+
+FOR THE BACKEND:
+just run the jupiter notebook for now.
