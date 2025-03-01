@@ -10,8 +10,18 @@
     <button id="fetchRandomNumber">Get Random Number</button>
     <form id="queryForm">
         <label for="query">Search:</label>
-        <input type="text" id="query" name="query">
-        <button type="button" id="fetchInfo">Get Info</button>
+        <input type="text" id="query" name="query" required>
+
+        <label for="county">County:</label>
+        <select id="county" name="county" required>
+            <option value="">Select County</option>
+            <option value="Boulder">Boulder</option>
+            <option value="Denver">Denver</option>
+            <option value="County3">County 3</option>
+            <!-- Add more counties as needed -->
+        </select>
+
+        <button type="submit" id="fetchInfo">Get Info</button>
     </form>
     <p id="result"></p>
 
@@ -27,6 +37,7 @@
             }
         });
 
+        /*
         document.getElementById('fetchInfo').addEventListener('click', async () => {
             const query = document.getElementById('query').value;
 
@@ -35,15 +46,53 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'County': 'placeholder_county'
                     },
                     body: JSON.stringify({ query }),
                 });
                 const data = await response.json();
-                document.getElementById('result').textContent = `Color: ${data.color}, Temperature: ${data.temperature}`;
+                document.getElementById('result').textContent = `Account Number: ${data['Account Number']}, Owner: ${data.Owner}, Owner's Mailing Address: ${data["Owner's Mailing Address"]}, Property Address: ${data['Property Address']}, City: ${data.City}, State: ${data.State}, Zip Code: ${data["Zip Code"]}, Parcel Number: ${data["Parcel Number"]}, Subdivision: ${data.Subdivision}, Market Area: ${data["Market Area"]}, Square Feet: ${data["Square Feet"]}, Acres: ${data.Acres}, Total Value: ${data["Total Value"]}, Structure Value: ${data["Structure Value"]}, Land Value: ${data["Land Value"]}, Property Tax Estimate: ${data["Property tax estimate"]}, Class: ${data.Class}, Built: ${data.Built}, Number of Rooms: ${data["Number of rooms"]}, Bedrooms: ${data.Bedrooms}, Full Bath: ${data["Full Bath"]}, Three Quarter Bath: ${data["3/4 Bath"]}, Half Bath: ${data["Half Bath"]}, Deed Numbers: ${data["Deed Numbers"].join(", ")}, Zoning: ${data.Zoning}`;
+                //`Account Number: ${data['Account Number']}, Owner: ${data.Owner}, Owner's Mailing Address: ${data["Owner's Mailing Address"]}, Property Address: ${data['Property Address']}, City: ${data.City}, State: ${data.State}, Zip Code: ${data["Zip Code"]}, Parcel Number: ${data["Parcel Number"]}, Subdivision: ${data.Subdivision}, Market Area: ${data["Market Area"]}, Square Feet: ${data["Square Feet"]}, Acres: ${data.Acres}, Total Value: ${data["Total Value"]}, Structure Value: ${data["Structure Value"]}, Land Value: ${data["Land Value"]}, Property Tax Estimate: ${data["Property tax estimate"]}, Class: ${data.Class}, Built: ${data.Built}, Number of Rooms: ${data["Number of rooms"]}, Bedrooms: ${data.Bedrooms}, Full Bath: ${data["Full Bath"]}, Three Quarter Bath: ${data["3/4 Bath"]}, Half Bath: ${data["Half Bath"]}, Deed Numbers: ${data["Deed Numbers"].join(", ")}, Zoning: ${data.Zoning}`
+                //'Property Address': '8724     ELGIN DR', 'City': 'LAFAYETTE', 'State': 'CO', 'Zip Code': '80026', 'Parcel Number': '146532004009', 'Subdivision': 'LARK MEADOWS - BOV', 'Market Area': '301', 'Square Feet': '66,603', 'Acres': '1.53', 'Total Value': '1162500', 'Structure Value': '571800', 'Land Value': '590700', 'Property tax estimate': '$6,863.26', 'Class': 'SINGLE FAM RES IMPROVEMENTS', 'Built': '1964', 'Number of rooms': '5', 'Bedrooms': '3', 'Full Bath': '1', '3/4 Bath': '0', 'Half Bath': '1', 'Deed Numbers': ['3921868', '3380362', '3371640', '2222372', '711589'], 'Zoning': 'RR - Rural Residential'
             } catch (error) {
                 console.error('Error fetching data:', error);
                 document.getElementById('result').textContent = 'Failed to fetch data.';
             }
+        });
+        */
+
+        document.addEventListener('DOMContentLoaded', () =>  {
+        const form = document.getElementById('queryForm');
+
+            form.addEventListener('submit', async (event) => {
+                const address = document.getElementById('query').value;
+                const county = document.getElementById('county').value;
+                event.preventDefault();
+                
+                try {
+                const response = await fetch('http://127.0.0.1:5000/query', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ address, county }),
+                });
+                const data = await response.json();
+                //document.getElementById('result').textContent = `Account Number: ${data['Account Number']}, Owner: ${data.Owner}, Owner's Mailing Address: ${data["Owner's Mailing Address"]}, Property Address: ${data['Property Address']}, City: ${data.City}, State: ${data.State}, Zip Code: ${data["Zip Code"]}, Parcel Number: ${data["Parcel Number"]}, Subdivision: ${data.Subdivision}, Market Area: ${data["Market Area"]}, Square Feet: ${data["Square Feet"]}, Acres: ${data.Acres}, Total Value: ${data["Total Value"]}, Structure Value: ${data["Structure Value"]}, Land Value: ${data["Land Value"]}, Property Tax Estimate: ${data["Property tax estimate"]}, Class: ${data.Class}, Built: ${data.Built}, Number of Rooms: ${data["Number of rooms"]}, Bedrooms: ${data.Bedrooms}, Full Bath: ${data["Full Bath"]}, Three Quarter Bath: ${data["3/4 Bath"]}, Half Bath: ${data["Half Bath"]}, Deed Numbers: ${data["Deed Numbers"].join(", ")}, Zoning: ${data.Zoning}`;
+                //OR
+                var houseInfo = ``;
+                var i;
+                for (i in data) {
+                    houseInfo += i+":"+data[i];
+                }
+                document.getElementById('result').textContent = houseInfo;
+                            } catch (error) {
+                console.error('Error fetching data:', error);
+                document.getElementById('result').textContent = 'Failed to fetch data.';
+            }
+
+            });
+
         });
     </script>
 </body>
