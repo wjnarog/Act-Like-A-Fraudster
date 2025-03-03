@@ -42,7 +42,7 @@
         <!-- <input type="submit" id="fetchInfo" value="Get Info"></input> -->
     </form>
     <!-- <p id="result"></p> -->
-    <p id="result"></p>
+    <div id="result"></div>
 
     <script>
         document.getElementById('fetchRandomNumber').addEventListener('click', async () => {
@@ -70,23 +70,119 @@
                         body: JSON.stringify({ query }),
                     });
                     const data = await response.json();
-                    // TODO - make it pretty
-
-                    // document.getElementById('result').textContent = `Color: ${data.color}, Temperature: ${data.temperature}`;
-                    document.getElementById('result').textContent = `TEST: ${JSON.stringify({ data })}`;
-                    // var convertedArray = JSON.parse(data);
-
-                    // document.getElementById('result')
-                    // .innerHTML = convertedArray
-                    // .map(([content, label])=>(`<li>${label} : ${content}</li>`))
-                    // .join("");
-
-                    // document.getElementById('result').textContent = `${convertedArray}`;
+                    document.getElementById('result').innerHTML = `
+                    <p class="table-title">RESULTS</p>
+                    <table class="output-table">
+                        <tr>
+                            <td>Account Number</td>
+                            <td>${data['Account Number']}</td>
+                        </tr>
+                        <tr>
+                            <td>Owner</td>
+                            <td>${data.Owner}</td>
+                        </tr>
+                        <tr>
+                            <td>Owner's Mailing Address</td>
+                            <td>${data["Owner's Mailing Address"]}</td>
+                        </tr>
+                        <tr>
+                            <td>Property Address</td>
+                            <td>${data['Property Address']}</td>
+                        </tr>
+                        <tr>
+                            <td>City</td>
+                            <td>${data.City}</td>
+                        </tr>
+                        <tr>
+                            <td>State</td>
+                            <td>${data.State}</td>
+                        </tr>
+                        <tr>
+                            <td>Zip Code</td>
+                            <td>${data['Zip Code']}</td>
+                        </tr>
+                        <tr>
+                            <td>Parcel Number</td>
+                            <td>${data['Parcel Number']}</td>
+                        </tr>
+                        <tr>
+                            <td>Subdivision</td>
+                            <td>${data.Subdivision}</td>
+                        </tr>
+                        <tr>
+                            <td>Market Area</td>
+                            <td>${data['Market Area']}</td>
+                        </tr>
+                        <tr>
+                            <td>Square Feet</td>
+                            <td>${data['Square Feet']}</td>
+                        </tr>
+                        <tr>
+                            <td>Acres</td>
+                            <td>${data.Acres}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Value</td>
+                            <td>${data['Total Value']}</td>
+                        </tr>
+                        <tr>
+                            <td>Structure Value</td>
+                            <td>${data['Structure Value']}</td>
+                        </tr>
+                        <tr>
+                            <td>Land Value</td>
+                            <td>${data['Land Value']}</td>
+                        </tr>
+                        <tr>
+                            <td>Property Tax Estimate</td>
+                            <td>${data['Property tax estimate']}</td>
+                        </tr>
+                        <tr>
+                            <td>Class</td>
+                            <td>${data.Class}</td>
+                        </tr>
+                        <tr>
+                            <td>Built</td>
+                            <td>${data.Built}</td>
+                        </tr>
+                        <tr>
+                            <td>Number of Rooms</td>
+                            <td>${data['Number of rooms']}</td>
+                        </tr>
+                        <tr>
+                            <td>Bedrooms</td>
+                            <td>${data.Bedrooms}</td>
+                        </tr>
+                        <tr>
+                            <td>Full Bath</td>
+                            <td>${data['Full Bath']}</td>
+                        </tr>
+                        <tr>
+                            <td>3/4 Bath</td>
+                            <td>${data['3/4 Bath']}</td>
+                        </tr>
+                        <tr>
+                            <td>Half Bath</td>
+                            <td>${data['Half Bath']}</td>
+                        </tr>
+                        <tr>
+                            <td>Deed Numbers</td>
+                            <td>${data['Deed Numbers']}</td>
+                        </tr>
+                        <tr>
+                            <td>Zoning</td>
+                            <td>${data.Zoning}</td>
+                        </tr>
+                    </table>
+                    `;
+                    // TODO - SMT Button
+                    // TODO - Google API
                 } catch (error) {
                     console.error('Error fetching data:', error);
                     document.getElementById('result').textContent = 'Failed to fetch data.';
                 }
             }
+            // TODO - Other county scrapers
             else {
                 document.getElementById('result').textContent = 'County not currently supported.';
             }

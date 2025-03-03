@@ -176,6 +176,54 @@ body {
       margin-right: 1vh;
 }
 
+
+/* TABLE TITLE FORMATTING */
+.table-title {
+      text-align: center;
+      color: #000000;
+      font-weight: 600;
+      font-size: 2em;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+}
+
+
+/* OUTPUT TABLE FORMATTING */
+/* BASE CODE FROM: https://dev.to/dcodeyt/creating-beautiful-html-tables-with-css-428l */
+.output-table {
+      /* font-size: 16px; */
+      border-collapse: collapse;
+      margin: 25px 0;
+      margin-left: auto;
+      margin-right: auto;
+      /* font-size: 0.9em;
+      font-family: sans-serif; */
+      min-width: 400px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+.output-table th,
+.output-table td {
+      padding: 12px 15px;
+}
+.output-table tbody bord
+.output-table tbody tr {
+      border-bottom: 1px solid #dddddd;
+}
+.output-table tbody tr:nth-of-type(even) {
+      background-color: #f3f3f3;
+}
+.output-table tbody tr:first-of-type {
+      border-top: 2px solid #0D4371;
+}
+.output-table tbody tr:last-of-type {
+      border-bottom: 2px solid #0D4371;
+}
+.output-table tbody tr.active-row {
+      font-weight: bolder;
+      color: #0D4371;
+}
+
+
 /* Add media queries for responsiveness - when the screen is 500px wide or less, stack the links on top of each other */
 @media screen and (max-width: 500px) {
       .header a {
