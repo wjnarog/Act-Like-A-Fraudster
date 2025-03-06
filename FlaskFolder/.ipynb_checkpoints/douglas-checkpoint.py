@@ -15,7 +15,7 @@ def search_douglas(query):
     search_box = WebDriverWait(driver, 10).until(
         EC.presence_of_element_located((By.CSS_SELECTOR, 'app-input-debounce input[type="text"]'))
     )
-    search_box.send_keys("1803 Lake Drive")
+    search_box.send_keys(query)
     search_box.send_keys(Keys.RETURN)
 
     # Wait for the results to load and click on the first row
