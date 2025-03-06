@@ -163,7 +163,6 @@ def search_denver(query):
     soup3 = BeautifulSoup(html, "html.parser")
 
     assessment_details = []
-    index_num = 0
     
     panels = soup3.find_all("div", class_="panel panel-primary")
     
@@ -184,13 +183,13 @@ def search_denver(query):
                 exempt = "Not Found"
     
             assessment_details.append({
-                "Year"+str(index_num): year,
-                "Type"+str(index_num): property_type,
-                "Actual"+str(index_num): actual,
-                "Assessed"+str(index_num): assessed,
-                "Exempt"+str(index_num): exempt
+                "Year": year,
+                "Type": property_type,
+                "Actual": actual,
+                "Assessed": assessed,
+                "Exempt": exempt
             })
-            index_num += 1
+            
     
     # print(assessment_details)
     for detail in assessment_details:
@@ -218,7 +217,6 @@ def search_denver(query):
     
     soup4 = BeautifulSoup(html, "html.parser")
     chain_of_title_records = []
-    index_num = 0
     
     table = soup4.find("table", class_="table table-striped sortable tablesorter tablesorter-default")
     rows = table.find("tbody").find_all("tr")
@@ -235,15 +233,14 @@ def search_denver(query):
             grantee = cells[6].text.strip()
             
             chain_of_title_records.append({
-                "Reception Number"+str(index_num): reception_number,
-                "Reception Date"+str(index_num): reception_date,
-                "Instrument"+str(index_num): instrument,
-                "Sale Date"+str(index_num): sale_date,
-                "Sale Price"+str(index_num): sale_price,
-                "Grantor"+str(index_num): grantor,
-                "Grantee"+str(index_num): grantee
+                "Reception Number": reception_number,
+                "Reception Date": reception_date,
+                "Instrument": instrument,
+                "Sale Date": sale_date,
+                "Sale Price": sale_price,
+                "Grantor": grantor,
+                "Grantee": grantee
             })
-            index_num += 1
             
     for record in chain_of_title_records:
         for key, value in record.items():
