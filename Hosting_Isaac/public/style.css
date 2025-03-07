@@ -75,6 +75,7 @@ body {
       text-transform: uppercase;
       letter-spacing: 0.05em;
       transition: 0.25s ease all;
+      border: 0;
 }
 
 
@@ -174,6 +175,49 @@ body {
       float: right;
       margin-left: auto;
       margin-right: 1vh;
+}
+
+
+/* PAGE TITLE FORMATTING */
+.page-title {
+      text-align: center;
+      color: #000000;
+      font-weight: 600;
+      font-size: 3em;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+}
+
+
+/* SEARCH FORM FORMATTING */
+.search-form {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 300;
+}
+
+
+/* SEARCH BUTTON FORMATTING */
+.search-button {
+      /* button color */
+      background: #0D4371;
+      /* text color */
+      color: #fff;
+      padding: 1em 2em;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1em;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: 0.25s ease all;
+      border: 0;
+}
+.search-button:hover {
+      /* button color */
+      background: #71AA4E;
+      /* text color */
+      color: #fff;
+      border: 0;
 }
 
 

@@ -24,38 +24,22 @@
         </div>
     </div>
 
-    <div class="wrapper">
-        This is the address page
-    </div>
-
-    <h1>Random Number Generator</h1>
-    <button id="fetchRandomNumber">Get Random Number</button>
-    <form id="queryForm">
-        <label for="dropDownCounty">Choose a county:</label>
+    <p class="page-title">ADDRESS SEARCH</p>
+    <form class="search-form" id="queryForm">
+        <label for="dropDownCounty">Choose a county:</label><br>
         <select name="dropDownCounty" id="dropDownCounty">
             <option value="boulder">Boulder</option>
             <option value="douglas">Douglas</option>
         </select>
-        <label for="query">Search:</label>
+        <br><br>
+        <label for="query">Enter an address:</label><br>
         <input type="text" id="query" name="query">
-        <button type="button" id="fetchInfo">Get Info</button>
-        <!-- <input type="submit" id="fetchInfo" value="Get Info"></input> -->
+        <br><br><br>
+        <button class="search-button" type="button" id="fetchInfo">Get Info</button>
     </form>
-    <!-- <p id="result"></p> -->
     <div id="result"></div>
 
     <script>
-        document.getElementById('fetchRandomNumber').addEventListener('click', async () => {
-            try {
-                const response = await fetch('http://127.0.0.1:5000/random');
-                const data = await response.json();
-                document.getElementById('result').textContent = `Random Number: ${data.number}`;
-            } catch (error) {
-                console.error('Error fetching random number:', error);
-                document.getElementById('result').textContent = 'Failed to fetch random number.';
-            }
-        });
-
         document.getElementById('fetchInfo').addEventListener('click', async () => {
             const dropDownCounty = document.getElementById('dropDownCounty').value;
             const query = document.getElementById('query').value;
@@ -71,6 +55,7 @@
                     });
                     const data = await response.json();
                     document.getElementById('result').innerHTML = `
+                    <br><br>
                     <p class="table-title">RESULTS</p>
                     <table class="output-table">
                         <tr>
@@ -184,6 +169,7 @@
             }
             // TODO - Other county scrapers
             else {
+                // TODO - Make this look nicer
                 document.getElementById('result').textContent = 'County not currently supported.';
             }
                 
