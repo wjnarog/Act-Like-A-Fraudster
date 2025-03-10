@@ -12,6 +12,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
 
+    <script type="text/javascript" src="API_KEY.js"></script>
+
 </head>
 
 <body>
@@ -46,6 +48,7 @@
         document.getElementById('fetchInfo').addEventListener('click', async () => {
             const dropDownCounty = document.getElementById('dropDownCounty').value;
             const query = document.getElementById('query').value;
+            let api_key = api_data.API_KEY;
 
             if (dropDownCounty == "boulder") {
                 try {
@@ -162,6 +165,19 @@
                             <td>${data.Zoning}</td>
                         </tr>
                     </table>
+                    <br>
+                    <p class="table-subtitle">MAP LOCATION</p>
+                    <iframe
+                        class="google-maps"
+                        width="600"
+                        height="450"
+                        style="border:1px solid black"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps/embed/v1/place?key=${api_key}
+                        &q={{ ${data['Property Address']} | replace(' ', '+') }}">
+                    </iframe>
                     `;
                     // TODO - SMT Button
                     // TODO - Google API
@@ -180,7 +196,7 @@
                         body: JSON.stringify({ query }),
                     });
                     const data = await response.json();
-                    // TODO - figure out data display
+                    // TODO - where's the property address? Not currently using it for Google Maps
                     document.getElementById('result').innerHTML = `
                     <br><br>
                     <p class="table-title">RESULTS</p>
@@ -264,6 +280,19 @@
                             <td>${data['sale0']['Tax Rate']}</td>
                         </tr>
                     </table>
+                    <br>
+                    <p class="table-subtitle">MAP LOCATION</p>
+                    <iframe
+                        class="google-maps"
+                        width="600"
+                        height="450"
+                        style="border:1px solid black"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps/embed/v1/place?key=${api_key}
+                        &q={{ ${data['Owner Address']} | replace(' ', '+') }}">
+                    </iframe>
                     `;
                     // TODO - SMT Button
                     // TODO - Google API
@@ -363,20 +392,31 @@
                             <td>${data['landinfo0']['Market Value']}</td>
                         </tr>
                     </table>
+                    <br>
+                    <p class="table-subtitle">MAP LOCATION</p>
+                    <iframe
+                        class="google-maps"
+                        width="600"
+                        height="450"
+                        style="border:1px solid black"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps/embed/v1/place?key=${api_key}
+                        &q={{ ${data['Mailing Address:']} | replace(' ', '+') }}">
+                    </iframe>
                     `;
                     // TODO - SMT Button
                     // TODO - Google API
                 } catch (error) {
                     console.error('Error fetching data:', error);
-                    document.getElementById('result').textContent = 'Failed to fetch data.';
+                    document.getElementById('result').innerHTML = '<br><p class="table-subtitle">Failed to fetch data.</p>';
                 }
             }
             // TODO - Other county scrapers
             else {
-                // TODO - Make this look nicer
-                document.getElementById('result').textContent = 'County not currently supported.';
+                document.getElementById('result').innerHTML = '<br><p class="table-subtitle">County not currently supported.</p>';
             }
-                
         });
     </script>
 </body>

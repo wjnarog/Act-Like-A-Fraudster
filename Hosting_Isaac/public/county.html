@@ -24,9 +24,27 @@
         </div>
     </div>
 
-    <div class="wrapper">
-        This is the county page
-    </div>
+    <p class="page-title">COUNTY SEARCH</p>
+    <form class="search-form" id="queryForm">
+        <label for="dropDownCounty">Choose a county:</label><br>
+        <select name="dropDownCounty" id="dropDownCounty">
+            <option value="adams">Adams</option>
+            <option value="boulder">Boulder</option>
+            <option value="denver">Denver</option>
+            <option value="douglas">Douglas</option>
+            <option value="elpaso">El Paso</option>
+        </select>
+        <br><br><br>
+        <button class="search-button" type="button" id="fetchInfo">Get Properties</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        // TODO
+        document.getElementById('fetchInfo').addEventListener('click', async () => {
+            const dropDownCounty = document.getElementById('dropDownCounty').value;
+        });
+    </script>
 </body>
 
 </html>
