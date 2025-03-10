@@ -245,27 +245,23 @@
                         </tr>
                     </table>
                     <br>
-                    <p class="table-subtitle">PUBLIC LAND SURVEY SYSTEM (PLSS) LOCATION</p>
+                    <p class="table-subtitle">MOST RECENT SALE INFO</p>
                     <table class="output-table">
                         <tr>
-                            <td>Quarter</td>
-                            <td>${data['Quarter']}</td>
+                            <td>Year</td>
+                            <td>${data['sale0']['Year']}</td>
                         </tr>
                         <tr>
-                            <td>Section</td>
-                            <td>${data['Section']}</td>
+                            <td>Actual Value</td>
+                            <td>${data['sale0']['Actual Value']}</td>
                         </tr>
                         <tr>
-                            <td>Township</td>
-                            <td>${data['Township']}</td>
+                            <td>Assessed Value</td>
+                            <td>${data['sale0']['Assessed Value']}</td>
                         </tr>
                         <tr>
-                            <td>Range</td>
-                            <td>${data['Range']}</td>
-                        </tr>
-                        <tr>
-                            <td>Section PDF Map Link</td>
-                            <td>${data['Section PDF Map Link']}</td>
+                            <td>Tax Rate</td>
+                            <td>${data['sale0']['Tax Rate']}</td>
                         </tr>
                     </table>
                     `;
@@ -276,7 +272,7 @@
                     document.getElementById('result').textContent = 'Failed to fetch data.';
                 }
             }
-            if (dropDownCounty == "elpaso") {
+            else if (dropDownCounty == "elpaso") {
                 try {
                     const response = await fetch('http://127.0.0.1:5000/query_elpaso', {
                         method: 'POST',
