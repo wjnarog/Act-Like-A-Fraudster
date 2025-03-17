@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 import random
 import time
-from scrapers import boulder, douglas, elpaso
+from scrapers import adams, boulder, douglas, elpaso
 
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
@@ -33,6 +33,19 @@ data = {
 # The route() function of the Flask class is a decorator, 
 # which tells the application which URL should call 
 # the associated function.
+
+@app.route('/query_adams', methods=['POST'])
+def query_badams():
+    # Get the JSON data from the request
+    request_data = request.get_json()
+    
+    # Extract the query from the JSON data
+    # query = request_data.get('query', '').lower()
+    query = "152 Pelican Ave"
+
+    adams_result = adams.search_adams(query)
+
+    return jsonify(adams_result)
 
 @app.route('/query_boulder', methods=['POST'])
 def query_boulder():

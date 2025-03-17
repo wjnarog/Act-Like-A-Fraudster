@@ -50,7 +50,219 @@
             const query = document.getElementById('query').value;
             let api_key = api_data.API_KEY;
 
-            if (dropDownCounty == "boulder") {
+            if (dropDownCounty == "adams") {
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/query_adams', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ query }),
+                    });
+                    const data = await response.json();
+                    document.getElementById('result').innerHTML = `
+                    <br><br>
+                    <p class="table-title">RESULTS</p>
+                    <table class="output-table">
+                        <tr>
+                            <td>Parcel Number</td>
+                            <td>${data['Parcel Number']}</td>
+                        </tr>
+                        <tr>
+                            <td>Owner Name</td>
+                            <td>${data['Owner Name']}</td>
+                        </tr>
+                        <tr>
+                            <td>Property Address</td>
+                            <td>${data['Property Address']}</td>
+                        </tr>
+                        <tr>
+                            <td>Legal Description</td>
+                            <td>${data['Legal Description']}</td>
+                        </tr>
+                        <tr>
+                            <td>Subdivision Plat</td>
+                            <td>${data['Subdivision Plat']}</td>
+                        </tr>
+                        <tr>
+                            <td>Account Number</td>
+                            <td>${data['Account Number0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Date Added</td>
+                            <td>${data['Date Added0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Tax District</td>
+                            <td>${data['Tax District0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Mill Levy</td>
+                            <td>${data['Mill Levy0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Permit Cases</td>
+                            <td>${data['Permit Cases']}</td>
+                        </tr>
+                        <tr>
+                            <td>Sale Date</td>
+                            <td>${data['Sale Date0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Sale Price</td>
+                            <td>${data['Sale Price0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Deed Type</td>
+                            <td>${data['Deed Type0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Reception Number</td>
+                            <td>${data['Reception Number0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Grantor</td>
+                            <td>${data['Grantor0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Grantee</td>
+                            <td>${data['Grantee0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Doc. Fee</td>
+                            <td>${data['Doc. Fee0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Doc. Date</td>
+                            <td>${data['Doc. Date0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Built As</td>
+                            <td>${data['Built As:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Year Built</td>
+                            <td>${data['Year Built:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Building Type</td>
+                            <td>${data['Building Type:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Construction Type</td>
+                            <td>${data['Construction Type:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Built As SQ Ft</td>
+                            <td>${data['Built As SQ Ft:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Number of Rooms</td>
+                            <td>${data['Number of Rooms:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Number of Baths</td>
+                            <td>${data['Number of Baths:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Number of Bedrooms</td>
+                            <td>${data['Number of Bedrooms:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Attached Garage SQ Ft</td>
+                            <td>${data['Attached Garage SQ Ft:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Detached Garage SQ Ft</td>
+                            <td>${data['Detached Garage SQ Ft:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Basement SQ Ft</td>
+                            <td>${data['Basement SQ Ft:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Finished Basement SQ Ft</td>
+                            <td>${data['Finished Basement SQ Ft:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Land Type</td>
+                            <td>${data['Land Type0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Unit of Measure</td>
+                            <td>${data['Unit of Measure0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Number of Units</td>
+                            <td>${data['Number of Units0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Fire District</td>
+                            <td>${data['Fire District0']}</td>
+                        </tr>
+                        <tr>
+                            <td>School District</td>
+                            <td>${data['School District0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Vacant/Improved</td>
+                            <td>${data['Vacant/Improved0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Actual Value</td>
+                            <td>${data['Actual Value0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Assessed Value</td>
+                            <td>${data['Assessed Value0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Property within Enterprise Zone</td>
+                            <td>${data['Property within Enterprise Zone']}</td>
+                        </tr>
+                        <tr>
+                            <td>Precinct</td>
+                            <td>${data['Precinct3']}</td>
+                        </tr>
+                        <tr>
+                            <td>District</td>
+                            <td>${data['District3']}</td>
+                        </tr>
+                        <tr>
+                            <td>Link</td>
+                            <td>${data['Link3']}</td>
+                        </tr>
+                        <tr>
+                            <td>Zoning Authority</td>
+                            <td>${data['Zoning Authority']}</td>
+                        </tr>
+                        <tr>
+                            <td>Zoning</td>
+                            <td>${data['Zoning']}</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <p class="table-subtitle">MAP LOCATION</p>
+                    <iframe
+                        class="google-maps"
+                        width="600"
+                        height="450"
+                        style="border:1px solid black"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps/embed/v1/place?key=${api_key}
+                        &q={{ ${data['Property Address']} | replace(' ', '+') }}">
+                    </iframe>
+                    `;
+                    // TODO - SMT Button
+                    // TODO - Google API
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    document.getElementById('result').textContent = 'Failed to fetch data.';
+                }
+            }
+            else if (dropDownCounty == "boulder") {
                 try {
                     const response = await fetch('http://127.0.0.1:5000/query_boulder', {
                         method: 'POST',
