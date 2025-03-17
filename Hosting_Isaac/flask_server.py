@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 import random
 import time
-from scrapers import adams, boulder, douglas, elpaso
+from scrapers import adams, boulder, denver, douglas, elpaso
 
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
@@ -59,6 +59,19 @@ def query_boulder():
     boulder_result = boulder.search_boulder(query)
 
     return jsonify(boulder_result)
+
+@app.route('/query_denver', methods=['POST'])
+def query_denver():
+    # Get the JSON data from the request
+    request_data = request.get_json()
+    
+    # Extract the query from the JSON data
+    # query = request_data.get('query', '').lower()
+    query = "1645 E MEXICO AVE"
+
+    maps_query, denver_result = denver.search_denver(query)
+
+    return jsonify(maps_query, denver_result)
 
 @app.route('/query_douglas', methods=['POST'])
 def query_douglas():

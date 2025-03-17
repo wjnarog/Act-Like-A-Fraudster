@@ -398,6 +398,133 @@
                     document.getElementById('result').textContent = 'Failed to fetch data.';
                 }
             }
+            else if (dropDownCounty == "denver") {
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/query_denver', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ query }),
+                    });
+                    const [maps_query, data] = await response.json();
+                    document.getElementById('result').innerHTML = `
+                    <br><br>
+                    <p class="table-title">RESULTS</p>
+                    <table class="output-table">
+                        <tr>
+                            <td>Year</td>
+                            <td>${data['Year']}</td>
+                        </tr>
+                        <tr>
+                            <td>Type</td>
+                            <td>${data['Type']}</td>
+                        </tr>
+                        <tr>
+                            <td>Actual Value</td>
+                            <td>${data["Actual"]}</td>
+                        </tr>
+                        <tr>
+                            <td>Assessed Value</td>
+                            <td>${data['Assessed']}</td>
+                        </tr>
+                        <tr>
+                            <td>Exempt</td>
+                            <td>${data['Exempt']}</td>
+                        </tr>
+                        <tr>
+                            <td>Reception Number</td>
+                            <td>${data['Reception Number']}</td>
+                        </tr>
+                        <tr>
+                            <td>Reception Date</td>
+                            <td>${data['Reception Date']}</td>
+                        </tr>
+                        <tr>
+                            <td>Instrument</td>
+                            <td>${data['Instrument']}</td>
+                        </tr>
+                        <tr>
+                            <td>Sale Date</td>
+                            <td>${data['Sale Date']}</td>
+                        </tr>
+                        <tr>
+                            <td>Sale Price</td>
+                            <td>${data['Sale Price']}</td>
+                        </tr>
+                        <tr>
+                            <td>Grantor</td>
+                            <td>${data['Grantor']}</td>
+                        </tr>
+                        <tr>
+                            <td>Grantee</td>
+                            <td>${data['Grantee']}</td>
+                        </tr>
+                        <tr>
+                            <td>Style</td>
+                            <td>${data['Style']}</td>
+                        </tr>
+                        <tr>
+                            <td>Building Sqr. Foot</td>
+                            <td>${data['Building Sqr. Foot']}</td>
+                        </tr>
+                        <tr>
+                            <td>Bedrooms</td>
+                            <td>${data['Bedrooms']}</td>
+                        </tr>
+                        <tr>
+                            <td>Baths Full/Half</td>
+                            <td>${data['Baths Full/Half']}</td>
+                        </tr>
+                        <tr>
+                            <td>Effective Year Built</td>
+                            <td>${data['Effective Year Built']}</td>
+                        </tr>
+                        <tr>
+                            <td>Basement/Finish</td>
+                            <td>${data['Basement/Finish']}</td>
+                        </tr>
+                        <tr>
+                            <td>Lot Size</td>
+                            <td>${data['Lot Size']}</td>
+                        </tr>
+                        <tr>
+                            <td>Zoned As</td>
+                            <td>${data['Zoned As']}</td>
+                        </tr>
+                        <tr>
+                            <td>Mill Levy</td>
+                            <td>${data['Mill Levy']}</td>
+                        </tr>
+                        <tr>
+                            <td>Document Type</td>
+                            <td>${data['Document Type']}</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <p class="table-subtitle">MAP LOCATION</p>
+                    <iframe
+                        class="google-maps"
+                        width="600"
+                        height="450"
+                        style="border:1px solid black"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps/embed/v1/place?key=${api_key}
+                        &q={{ ${ JSON.stringify(maps_query) } | replace(' ', '+') }}">
+                    </iframe>
+                    `;
+                    // TODO - figure out passing address from query to Google Maps API
+                    console.log(maps_query);
+                    console.log(JSON.stringify(maps_query));
+                    // TODO - SMT Button
+                    // TODO - Google API
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    document.getElementById('result').textContent = 'Failed to fetch data.';
+                }
+            }
             else if (dropDownCounty == "douglas") {
                 try {
                     const response = await fetch('http://127.0.0.1:5000/query_douglas', {
