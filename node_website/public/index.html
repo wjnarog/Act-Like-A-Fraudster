@@ -15,13 +15,32 @@
         <label for="county">County:</label>
         <select id="county" name="county" required>
             <option value="">Select County</option>
+            <option value="Adams">Adams</option>
             <option value="Boulder">Boulder</option>
+            <option value="Broomfield">Broomfield</option>
             <option value="Denver">Denver</option>
-            <option value="County3">County 3</option>
+            <option value="Douglas">Douglas</option>
+            <option value="El Paso">El Paso</option>
+            <option value="Larimer">Larimer</option>
+            <option value="Weld">Weld</option>
             <!-- Add more counties as needed -->
         </select>
 
         <button type="submit" id="fetchInfo">Get Info</button>
+    </form>
+    <form id="searchForm">
+        <label for="search">Search:</label>
+        <input type="text" id="search" name="search" required>
+
+        <label for="method">Method:</label>
+        <select id="method" name="method" required>
+            <option value="">Select Method</option>
+            <option value="redfin">Redfin</option>
+            <option value="homes">homes.com</option>
+
+        </select>
+
+        <button type="submit" id="fetchhomes">Get Info</button>
     </form>
     <p id="result"></p>
 
@@ -62,9 +81,10 @@
         */
 
         document.addEventListener('DOMContentLoaded', () =>  {
-        const form = document.getElementById('queryForm');
+        const query_form = document.getElementById('queryForm');
+        const search_form = document.getElementById('searchForm');
 
-            form.addEventListener('submit', async (event) => {
+            query_form.addEventListener('submit', async (event) => {
                 const address = document.getElementById('query').value;
                 const county = document.getElementById('county').value;
                 event.preventDefault();
@@ -80,17 +100,52 @@
                 const data = await response.json();
                 //document.getElementById('result').textContent = `Account Number: ${data['Account Number']}, Owner: ${data.Owner}, Owner's Mailing Address: ${data["Owner's Mailing Address"]}, Property Address: ${data['Property Address']}, City: ${data.City}, State: ${data.State}, Zip Code: ${data["Zip Code"]}, Parcel Number: ${data["Parcel Number"]}, Subdivision: ${data.Subdivision}, Market Area: ${data["Market Area"]}, Square Feet: ${data["Square Feet"]}, Acres: ${data.Acres}, Total Value: ${data["Total Value"]}, Structure Value: ${data["Structure Value"]}, Land Value: ${data["Land Value"]}, Property Tax Estimate: ${data["Property tax estimate"]}, Class: ${data.Class}, Built: ${data.Built}, Number of Rooms: ${data["Number of rooms"]}, Bedrooms: ${data.Bedrooms}, Full Bath: ${data["Full Bath"]}, Three Quarter Bath: ${data["3/4 Bath"]}, Half Bath: ${data["Half Bath"]}, Deed Numbers: ${data["Deed Numbers"].join(", ")}, Zoning: ${data.Zoning}`;
                 //OR
+                
                 var houseInfo = ``;
                 var i;
                 for (i in data) {
                     houseInfo += i+":"+data[i];
                 }
                 document.getElementById('result').textContent = houseInfo;
+                
                             } catch (error) {
                 console.error('Error fetching data:', error);
                 document.getElementById('result').textContent = 'Failed to fetch data.';
+                
             }
+                
+            });
 
+            search_form.addEventListener('submit', async (event) => {
+                const search = document.getElementById('search').value;
+                const method = document.getElementById('method').value;
+                event.preventDefault();
+                
+                try {
+                const response = await fetch('http://127.0.0.1:5000/search', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ search, method }),
+                });
+                const data = await response.json();
+                //document.getElementById('result').textContent = `Account Number: ${data['Account Number']}, Owner: ${data.Owner}, Owner's Mailing Address: ${data["Owner's Mailing Address"]}, Property Address: ${data['Property Address']}, City: ${data.City}, State: ${data.State}, Zip Code: ${data["Zip Code"]}, Parcel Number: ${data["Parcel Number"]}, Subdivision: ${data.Subdivision}, Market Area: ${data["Market Area"]}, Square Feet: ${data["Square Feet"]}, Acres: ${data.Acres}, Total Value: ${data["Total Value"]}, Structure Value: ${data["Structure Value"]}, Land Value: ${data["Land Value"]}, Property Tax Estimate: ${data["Property tax estimate"]}, Class: ${data.Class}, Built: ${data.Built}, Number of Rooms: ${data["Number of rooms"]}, Bedrooms: ${data.Bedrooms}, Full Bath: ${data["Full Bath"]}, Three Quarter Bath: ${data["3/4 Bath"]}, Half Bath: ${data["Half Bath"]}, Deed Numbers: ${data["Deed Numbers"].join(", ")}, Zoning: ${data.Zoning}`;
+                //OR
+                
+                var houseInfo = ``;
+                var i;
+                for (i in data) {
+                    houseInfo += i+":"+data[i];
+                }
+                document.getElementById('result').textContent = houseInfo;
+                
+                            } catch (error) {
+                console.error('Error fetching data:', error);
+                document.getElementById('result').textContent = 'Failed to fetch data.';
+                
+            }
+                
             });
 
         });
