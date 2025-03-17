@@ -211,6 +211,11 @@ body {
       letter-spacing: 0.05em;
       transition: 0.25s ease all;
       border: 0;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+      display: block;
+      margin: auto;
 }
 .search-button:hover {
       /* button color */
@@ -218,6 +223,18 @@ body {
       /* text color */
       color: #fff;
       border: 0;
+}
+
+
+/* BLUE TEXT */
+.blue-text {
+      color: #2b6291;
+}
+
+
+/* GREEN TEXT */
+.green-text {
+      color: #71AA4E;
 }
 
 
