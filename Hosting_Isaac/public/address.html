@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Page</title>
+
+    <link href="normalize.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+
+    <script type="text/javascript" src="API_KEY.js"></script>
+
+</head>
+
+<body>
+    <div class="header">
+        <a href="index.html" class="logo">FIND MY FRAUD</a>
+        <div class="header-right">
+            <a class="active" href="#home">ABOUT</a>
+            <a href="#contact">NEXT STEPS</a>
+            <a href="#about">COPYRIGHT</a>
+        </div>
+    </div>
+
+    <p class="page-title">ADDRESS SEARCH</p>
+    <form class="search-form" id="queryForm">
+        <label for="dropDownCounty">Choose a county:</label><br>
+        <select name="dropDownCounty" id="dropDownCounty">
+            <option value="adams">Adams</option>
+            <option value="boulder">Boulder</option>
+            <option value="denver">Denver</option>
+            <option value="douglas">Douglas</option>
+            <option value="elpaso">El Paso</option>
+        </select>
+        <br><br>
+        <label for="query">Enter an address:</label><br>
+        <input type="text" id="query" name="query">
+        <br><br><br>
+        <button class="search-button" type="button" id="fetchInfo">Get Info</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('fetchInfo').addEventListener('click', async () => {
+            const dropDownCounty = document.getElementById('dropDownCounty').value;
+            const query = document.getElementById('query').value;
+            let api_key = api_data.API_KEY;
+
+            if (dropDownCounty == "adams") {
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/query_adams', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ query }),
+                    });
+                    const data = await response.json();
+                    document.getElementById('result').innerHTML = `
+                    <br><br>
+                    <p class="table-title">RESULTS</p>
+                    <table class="output-table">
+                        <tr>
+                            <td>Parcel Number</td>
+                            <td>${data['Parcel Number']}</td>
+                        </tr>
+                        <tr>
+                            <td>Owner Name</td>
+                            <td>${data['Owner Name']}</td>
+                        </tr>
+                        <tr>
+                            <td>Property Address</td>
+                            <td>${data['Property Address']}</td>
+                        </tr>
+                        <tr>
+                            <td>Legal Description</td>
+                            <td>${data['Legal Description']}</td>
+                        </tr>
+                        <tr>
+                            <td>Subdivision Plat</td>
+                            <td>${data['Subdivision Plat']}</td>
+                        </tr>
+                        <tr>
+                            <td>Account Number</td>
+                            <td>${data['Account Number0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Date Added</td>
+                            <td>${data['Date Added0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Tax District</td>
+                            <td>${data['Tax District0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Mill Levy</td>
+                            <td>${data['Mill Levy0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Permit Cases</td>
+                            <td>${data['Permit Cases']}</td>
+                        </tr>
+                        <tr>
+                            <td>Sale Date</td>
+                            <td>${data['Sale Date0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Sale Price</td>
+                            <td>${data['Sale Price0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Deed Type</td>
+                            <td>${data['Deed Type0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Reception Number</td>
+                            <td>${data['Reception Number0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Grantor</td>
+                            <td>${data['Grantor0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Grantee</td>
+                            <td>${data['Grantee0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Doc. Fee</td>
+                            <td>${data['Doc. Fee0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Doc. Date</td>
+                            <td>${data['Doc. Date0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Built As</td>
+                            <td>${data['Built As:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Year Built</td>
+                            <td>${data['Year Built:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Building Type</td>
+                            <td>${data['Building Type:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Construction Type</td>
+                            <td>${data['Construction Type:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Built As SQ Ft</td>
+                            <td>${data['Built As SQ Ft:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Number of Rooms</td>
+                            <td>${data['Number of Rooms:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Number of Baths</td>
+                            <td>${data['Number of Baths:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Number of Bedrooms</td>
+                            <td>${data['Number of Bedrooms:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Attached Garage SQ Ft</td>
+                            <td>${data['Attached Garage SQ Ft:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Detached Garage SQ Ft</td>
+                            <td>${data['Detached Garage SQ Ft:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Basement SQ Ft</td>
+                            <td>${data['Basement SQ Ft:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Finished Basement SQ Ft</td>
+                            <td>${data['Finished Basement SQ Ft:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Land Type</td>
+                            <td>${data['Land Type0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Unit of Measure</td>
+                            <td>${data['Unit of Measure0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Number of Units</td>
+                            <td>${data['Number of Units0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Fire District</td>
+                            <td>${data['Fire District0']}</td>
+                        </tr>
+                        <tr>
+                            <td>School District</td>
+                            <td>${data['School District0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Vacant/Improved</td>
+                            <td>${data['Vacant/Improved0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Actual Value</td>
+                            <td>${data['Actual Value0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Assessed Value</td>
+                            <td>${data['Assessed Value0']}</td>
+                        </tr>
+                        <tr>
+                            <td>Property within Enterprise Zone</td>
+                            <td>${data['Property within Enterprise Zone']}</td>
+                        </tr>
+                        <tr>
+                            <td>Precinct</td>
+                            <td>${data['Precinct3']}</td>
+                        </tr>
+                        <tr>
+                            <td>District</td>
+                            <td>${data['District3']}</td>
+                        </tr>
+                        <tr>
+                            <td>Link</td>
+                            <td>${data['Link3']}</td>
+                        </tr>
+                        <tr>
+                            <td>Zoning Authority</td>
+                            <td>${data['Zoning Authority']}</td>
+                        </tr>
+                        <tr>
+                            <td>Zoning</td>
+                            <td>${data['Zoning']}</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <p class="table-subtitle">MAP LOCATION</p>
+                    <iframe
+                        class="google-maps"
+                        width="600"
+                        height="450"
+                        style="border:1px solid black"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps/embed/v1/place?key=${api_key}
+                        &q={{ ${data['Property Address']} | replace(' ', '+') }}">
+                    </iframe>
+                    <br>
+                    <p class="table-title">SO WHAT CAN I DO?</p>
+                    <p class="table-subtitle">Title fraud can be prevented with use of the software <span class="blue-text">SecureMyTransaction</span>.</p>
+                    <p class="table-subtitle">Find out more <a href="https://securemytransaction.com" class="green-text">HERE</a>.</p>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    `;
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    document.getElementById('result').textContent = 'Failed to fetch data.';
+                }
+            }
+            else if (dropDownCounty == "boulder") {
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/query_boulder', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ query }),
+                    });
+                    const data = await response.json();
+                    document.getElementById('result').innerHTML = `
+                    <br><br>
+                    <p class="table-title">RESULTS</p>
+                    <table class="output-table">
+                        <tr>
+                            <td>Account Number</td>
+                            <td>${data['Account Number']}</td>
+                        </tr>
+                        <tr>
+                            <td>Owner</td>
+                            <td>${data.Owner}</td>
+                        </tr>
+                        <tr>
+                            <td>Owner's Mailing Address</td>
+                            <td>${data["Owner's Mailing Address"]}</td>
+                        </tr>
+                        <tr>
+                            <td>Property Address</td>
+                            <td>${data['Property Address']}</td>
+                        </tr>
+                        <tr>
+                            <td>City</td>
+                            <td>${data.City}</td>
+                        </tr>
+                        <tr>
+                            <td>State</td>
+                            <td>${data.State}</td>
+                        </tr>
+                        <tr>
+                            <td>Zip Code</td>
+                            <td>${data['Zip Code']}</td>
+                        </tr>
+                        <tr>
+                            <td>Parcel Number</td>
+                            <td>${data['Parcel Number']}</td>
+                        </tr>
+                        <tr>
+                            <td>Subdivision</td>
+                            <td>${data.Subdivision}</td>
+                        </tr>
+                        <tr>
+                            <td>Market Area</td>
+                            <td>${data['Market Area']}</td>
+                        </tr>
+                        <tr>
+                            <td>Square Feet</td>
+                            <td>${data['Square Feet']}</td>
+                        </tr>
+                        <tr>
+                            <td>Acres</td>
+                            <td>${data.Acres}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Value</td>
+                            <td>${data['Total Value']}</td>
+                        </tr>
+                        <tr>
+                            <td>Structure Value</td>
+                            <td>${data['Structure Value']}</td>
+                        </tr>
+                        <tr>
+                            <td>Land Value</td>
+                            <td>${data['Land Value']}</td>
+                        </tr>
+                        <tr>
+                            <td>Property Tax Estimate</td>
+                            <td>${data['Property tax estimate']}</td>
+                        </tr>
+                        <tr>
+                            <td>Class</td>
+                            <td>${data.Class}</td>
+                        </tr>
+                        <tr>
+                            <td>Built</td>
+                            <td>${data.Built}</td>
+                        </tr>
+                        <tr>
+                            <td>Number of Rooms</td>
+                            <td>${data['Number of rooms']}</td>
+                        </tr>
+                        <tr>
+                            <td>Bedrooms</td>
+                            <td>${data.Bedrooms}</td>
+                        </tr>
+                        <tr>
+                            <td>Full Bath</td>
+                            <td>${data['Full Bath']}</td>
+                        </tr>
+                        <tr>
+                            <td>3/4 Bath</td>
+                            <td>${data['3/4 Bath']}</td>
+                        </tr>
+                        <tr>
+                            <td>Half Bath</td>
+                            <td>${data['Half Bath']}</td>
+                        </tr>
+                        <tr>
+                            <td>Deed Numbers</td>
+                            <td>${data['Deed Numbers']}</td>
+                        </tr>
+                        <tr>
+                            <td>Zoning</td>
+                            <td>${data.Zoning}</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <p class="table-subtitle">MAP LOCATION</p>
+                    <iframe
+                        class="google-maps"
+                        width="600"
+                        height="450"
+                        style="border:1px solid black"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps/embed/v1/place?key=${api_key}
+                        &q={{ ${data['Property Address']} | replace(' ', '+') }}">
+                    </iframe>
+                    <br>
+                    <p class="table-title">SO WHAT CAN I DO?</p>
+                    <p class="table-subtitle">Title fraud can be prevented with use of the software <span class="blue-text">SecureMyTransaction</span>.</p>
+                    <p class="table-subtitle">Find out more <a href="https://securemytransaction.com" class="green-text">HERE</a>.</p>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    `;
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    document.getElementById('result').textContent = 'Failed to fetch data.';
+                }
+            }
+            else if (dropDownCounty == "denver") {
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/query_denver', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ query }),
+                    });
+                    const [maps_query, data] = await response.json();
+                    document.getElementById('result').innerHTML = `
+                    <br><br>
+                    <p class="table-title">RESULTS</p>
+                    <table class="output-table">
+                        <tr>
+                            <td>Year</td>
+                            <td>${data['Year']}</td>
+                        </tr>
+                        <tr>
+                            <td>Type</td>
+                            <td>${data['Type']}</td>
+                        </tr>
+                        <tr>
+                            <td>Actual Value</td>
+                            <td>${data["Actual"]}</td>
+                        </tr>
+                        <tr>
+                            <td>Assessed Value</td>
+                            <td>${data['Assessed']}</td>
+                        </tr>
+                        <tr>
+                            <td>Exempt</td>
+                            <td>${data['Exempt']}</td>
+                        </tr>
+                        <tr>
+                            <td>Reception Number</td>
+                            <td>${data['Reception Number']}</td>
+                        </tr>
+                        <tr>
+                            <td>Reception Date</td>
+                            <td>${data['Reception Date']}</td>
+                        </tr>
+                        <tr>
+                            <td>Instrument</td>
+                            <td>${data['Instrument']}</td>
+                        </tr>
+                        <tr>
+                            <td>Sale Date</td>
+                            <td>${data['Sale Date']}</td>
+                        </tr>
+                        <tr>
+                            <td>Sale Price</td>
+                            <td>${data['Sale Price']}</td>
+                        </tr>
+                        <tr>
+                            <td>Grantor</td>
+                            <td>${data['Grantor']}</td>
+                        </tr>
+                        <tr>
+                            <td>Grantee</td>
+                            <td>${data['Grantee']}</td>
+                        </tr>
+                        <tr>
+                            <td>Style</td>
+                            <td>${data['Style']}</td>
+                        </tr>
+                        <tr>
+                            <td>Building Sqr. Foot</td>
+                            <td>${data['Building Sqr. Foot']}</td>
+                        </tr>
+                        <tr>
+                            <td>Bedrooms</td>
+                            <td>${data['Bedrooms']}</td>
+                        </tr>
+                        <tr>
+                            <td>Baths Full/Half</td>
+                            <td>${data['Baths Full/Half']}</td>
+                        </tr>
+                        <tr>
+                            <td>Effective Year Built</td>
+                            <td>${data['Effective Year Built']}</td>
+                        </tr>
+                        <tr>
+                            <td>Basement/Finish</td>
+                            <td>${data['Basement/Finish']}</td>
+                        </tr>
+                        <tr>
+                            <td>Lot Size</td>
+                            <td>${data['Lot Size']}</td>
+                        </tr>
+                        <tr>
+                            <td>Zoned As</td>
+                            <td>${data['Zoned As']}</td>
+                        </tr>
+                        <tr>
+                            <td>Mill Levy</td>
+                            <td>${data['Mill Levy']}</td>
+                        </tr>
+                        <tr>
+                            <td>Document Type</td>
+                            <td>${data['Document Type']}</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <p class="table-subtitle">MAP LOCATION</p>
+                    <iframe
+                        class="google-maps"
+                        width="600"
+                        height="450"
+                        style="border:1px solid black"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps/embed/v1/place?key=${api_key}
+                        &q={{ ${ JSON.stringify(maps_query) } | replace(' ', '+') }}">
+                    </iframe>
+                    <br>
+                    <p class="table-title">SO WHAT CAN I DO?</p>
+                    <p class="table-subtitle">Title fraud can be prevented with use of the software <span class="blue-text">SecureMyTransaction</span>.</p>
+                    <p class="table-subtitle">Find out more <a href="https://securemytransaction.com" class="green-text">HERE</a>.</p>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    `;
+                    // TODO - figure out passing address from query to Google Maps API
+                    console.log(maps_query);
+                    console.log(JSON.stringify(maps_query));
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    document.getElementById('result').textContent = 'Failed to fetch data.';
+                }
+            }
+            else if (dropDownCounty == "douglas") {
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/query_douglas', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ query }),
+                    });
+                    const data = await response.json();
+                    // TODO - where's the property address? Not currently using it for Google Maps
+                    document.getElementById('result').innerHTML = `
+                    <br><br>
+                    <p class="table-title">RESULTS</p>
+                    <br>
+                    <p class="table-subtitle">ACCOUNT SUMMARY</p>
+                    <table class="output-table">
+                        <tr>
+                            <td>Account Number</td>
+                            <td>${data['Account #:']}</td>
+                        </tr>
+                        <tr>
+                            <td>State Parcel Number</td>
+                            <td>${data['State Parcel #:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Account Type</td>
+                            <td>${data['Account Type:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Tax District</td>
+                            <td>${data['Tax District:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Neighborhood Exit</td>
+                            <td>${data['Neighborhood-Ext:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Building Count</td>
+                            <td>${data['Building Count:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Building Permit Authority</td>
+                            <td>${data['Building Permit Authority:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Phone Number</td>
+                            <td>${data['Phone:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>${data['Name:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Reception Number</td>
+                            <td>${data['Reception No:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Location Description</td>
+                            <td>${data['Location Description']}</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <p class="table-subtitle">OWNER INFO</p>
+                    <table class="output-table">
+                        <tr>
+                            <td>Owner Name</td>
+                            <td>${data['Owner Name']}</td>
+                        </tr>
+                        <tr>
+                            <td>Owner Address</td>
+                            <td>${data['Owner Address']}</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <p class="table-subtitle">MOST RECENT SALE INFO</p>
+                    <table class="output-table">
+                        <tr>
+                            <td>Year</td>
+                            <td>${data['sale0']['Year']}</td>
+                        </tr>
+                        <tr>
+                            <td>Actual Value</td>
+                            <td>${data['sale0']['Actual Value']}</td>
+                        </tr>
+                        <tr>
+                            <td>Assessed Value</td>
+                            <td>${data['sale0']['Assessed Value']}</td>
+                        </tr>
+                        <tr>
+                            <td>Tax Rate</td>
+                            <td>${data['sale0']['Tax Rate']}</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <p class="table-subtitle">MAP LOCATION</p>
+                    <iframe
+                        class="google-maps"
+                        width="600"
+                        height="450"
+                        style="border:1px solid black"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps/embed/v1/place?key=${api_key}
+                        &q={{ ${data['Owner Address']} | replace(' ', '+') }}">
+                    </iframe>
+                    <br>
+                    <p class="table-title">SO WHAT CAN I DO?</p>
+                    <p class="table-subtitle">Title fraud can be prevented with use of the software <span class="blue-text">SecureMyTransaction</span>.</p>
+                    <p class="table-subtitle">Find out more <a href="https://securemytransaction.com" class="green-text">HERE</a>.</p>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    `;
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    document.getElementById('result').textContent = 'Failed to fetch data.';
+                }
+            }
+            else if (dropDownCounty == "elpaso") {
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/query_elpaso', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ query }),
+                    });
+                    const data = await response.json();
+                    document.getElementById('result').innerHTML = `
+                    <br><br>
+                    <p class="table-title">RESULTS</p>
+                    <table class="output-table">
+                        <tr>
+                            <td>Owner</td>
+                            <td>${data['Owner:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Mailing Address</td>
+                            <td>${data['Mailing Address:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Location</td>
+                            <td>${data['Location:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Tax Status</td>
+                            <td>${data['Tax Status:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Zoning</td>
+                            <td>${data['Zoning:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Plat Number</td>
+                            <td>${data['Plat No:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Legal Description</td>
+                            <td>${data['Legal Description:']}</td>
+                        </tr>
+                        <tr>
+                            <td>Market Value Land</td>
+                            <td>${data['Market Value Land']}</td>
+                        </tr>
+                        <tr>
+                            <td>Market Value Improvement</td>
+                            <td>${data['Market Value Improvement']}</td>
+                        </tr>
+                        <tr>
+                            <td>Market Value Total</td>
+                            <td>${data['Market Value Total']}</td>
+                        </tr>
+                        <tr>
+                            <td>Assessed Key Land</td>
+                            <td>${data['Assessed Key Land']}</td>
+                        </tr>
+                        <tr>
+                            <td>Assessed Key Improvement</td>
+                            <td>${data['Assessed Key Improvement']}</td>
+                        </tr>
+                        <tr>
+                            <td>Assessed Key Total</td>
+                            <td>${data['Assessed Key Total']}</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <p class="table-subtitle">LAND INFO</p>
+                    <table class="output-table">
+                        <tr>
+                            <td>Sequence Number</td>
+                            <td>${data['landinfo0']['Sequence Number']}</td>
+                        </tr>
+                        <tr>
+                            <td>Land Use</td>
+                            <td>${data['landinfo0']['Land Use']}</td>
+                        </tr>
+                        <tr>
+                            <td>Assessment Rate</td>
+                            <td>${data['landinfo0']['Assessment Rate']}</td>
+                        </tr>
+                        <tr>
+                            <td>Area</td>
+                            <td>${data['landinfo0']['Area']}</td>
+                        </tr>
+                        <tr>
+                            <td>Market Value</td>
+                            <td>${data['landinfo0']['Market Value']}</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <p class="table-subtitle">MAP LOCATION</p>
+                    <iframe
+                        class="google-maps"
+                        width="600"
+                        height="450"
+                        style="border:1px solid black"
+                        loading="lazy"
+                        allowfullscreen
+                        referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps/embed/v1/place?key=${api_key}
+                        &q={{ ${data['Mailing Address:']} | replace(' ', '+') }}">
+                    </iframe>
+                    <br>
+                    <p class="table-title">SO WHAT CAN I DO?</p>
+                    <p class="table-subtitle">Title fraud can be prevented with use of the software <span class="blue-text">SecureMyTransaction</span>.</p>
+                    <p class="table-subtitle">Find out more <a href="https://securemytransaction.com" class="green-text">HERE</a>.</p>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    <br>
+                    `;
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    document.getElementById('result').innerHTML = '<br><p class="table-subtitle">Failed to fetch data.</p>';
+                }
+            }
+            // TODO - Other county scrapers
+            else {
+                document.getElementById('result').innerHTML = '<br><p class="table-subtitle">County not currently supported.</p>';
+            }
+        });
+    </script>
+</body>
+
+</html>
