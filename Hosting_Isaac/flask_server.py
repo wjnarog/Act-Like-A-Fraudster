@@ -11,7 +11,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 import random
 import time
-from scrapers import adams, boulder, denver, douglas, elpaso
+from scrapers import adams, boulder, denver, douglas, elpaso, redfin, homes
 
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
@@ -33,6 +33,10 @@ data = {
 # The route() function of the Flask class is a decorator, 
 # which tells the application which URL should call 
 # the associated function.
+
+######################
+# COUNTY SITE SCRAPERS
+######################
 
 @app.route('/query_adams', methods=['POST'])
 def query_badams():
@@ -98,6 +102,38 @@ def query_elpaso():
     elpaso_result = elpaso.search_elpaso(query)
 
     return jsonify(elpaso_result)
+
+#######################
+# LISTING SITE SCRAPERS
+#######################
+
+@app.route('/query_redfin', methods=['POST'])
+def query_redfin():
+    # Get the JSON data from the request
+    request_data = request.get_json()
+    
+    # Extract the query from the JSON data
+    query = request_data.get('query', '').lower()
+
+    redfin_result = redfin.search_redfin(query)
+
+    return jsonify(redfin_result)
+
+@app.route('/query_homes', methods=['POST'])
+def query_homes():
+    # Get the JSON data from the request
+    request_data = request.get_json()
+    
+    # Extract the query from the JSON data
+    query = request_data.get('query', '').lower()
+
+    homes_result = homes.search_homes(query)
+
+    return jsonify(homes_result)
+
+#######
+# OTHER
+#######
 
 @app.route('/')
 # ‘/’ URL is bound with hello_world() function.
