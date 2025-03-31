@@ -3,7 +3,116 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.action_chains import ActionChains
 from bs4 import BeautifulSoup
+import time
+
+def process_reception_number_Douglas(reception_number):
+    # Initialize the Chrome WebDriver
+    driver = webdriver.Chrome()
+    driver.get("https://apps.douglas.co.us/LandmarkWeb")
+
+    # Wait for the page to load completely
+    wait = WebDriverWait(driver, 20)
+    try:
+        wait.until(EC.presence_of_element_located(
+            (By.CLASS_NAME, "divInside")))
+        # print("Page loaded successfully.")
+    except Exception as e:
+        print(f"Error loading page: {e}")
+        driver.quit()
+        return
+
+    # Locate the "Reception number" link by its span text "reception number"
+    try:
+        reception_number_link = driver.find_element(
+            By.XPATH, "//span[text()='reception number']/preceding-sibling::a")
+        reception_number_link.click()
+        # print("Clicked 'Reception number' link.")
+    except Exception as e:
+        print(f"Error clicking 'Reception number' link: {e}")
+        driver.quit()
+        return
+
+    # Wait for the modal to appear (or time out after 10 seconds)
+    try:
+        disclaimer_modal = wait.until(
+            EC.presence_of_element_located((By.ID, "disclaimer")))
+        accept_button = driver.find_element(By.ID, "idAcceptYes")
+        accept_button.click()
+        # print("Disclaimer modal accepted.")
+    except Exception as e:
+        print(f"Disclaimer modal did not appear or could not be accepted: {e}")
+
+    # Process the reception number
+    # print(f"Processing reception number: {reception_number}")
+
+    try:
+        # Wait for the dropdown to be present on the page
+        dropdown = wait.until(EC.presence_of_element_located(
+            (By.ID, "matchType-InstrumentNumber")))
+        # print("Dropdown located.")
+
+        # Use the Select class to interact with the dropdown
+        select = Select(dropdown)
+        select.select_by_value("2")  # Select the "Equals" option
+        # print("Dropdown option selected.")
+
+        # Enter the reception number
+        input_field = driver.find_element(By.ID, "instrumentNumber")
+        input_field.clear()
+        input_field.send_keys(reception_number)
+        # print("Reception number entered.")
+
+        # Find the submit button and click it
+        submit_button = driver.find_element(By.ID, "submit-InstrumentNumber")
+        submit_button.click()
+        # print("Submit button clicked.")
+
+        # Wait for the results table to load
+        try:
+            table = wait.until(
+                EC.presence_of_element_located((By.ID, "resultsTable")))
+            # print("Results table loaded.")
+
+            # Locate the first row in the results table
+            row = wait.until(EC.presence_of_element_located(
+                (By.XPATH, "//tr[contains(@id, 'doc_')]")))
+            # print("Row found.")
+
+            # Scroll the row into view
+            driver.execute_script("arguments[0].scrollIntoView(true);", row)
+            time.sleep(1)  # Wait for the scroll to complete
+
+            # Use ActionChains to click the row
+            actions = ActionChains(driver)
+            actions.move_to_element(row).click().perform()
+            # print("Row clicked.")
+
+            # Wait for the details page to load
+            wait.until(EC.presence_of_element_located(
+                (By.ID, "documentInformationParent")))
+            # print("Details page loaded.")
+
+            # Extract the image source
+            image_element = wait.until(
+                EC.presence_of_element_located((By.ID, "documentImageInner")))
+            image_src = image_element.get_attribute("src")
+            return image_src
+
+        except Exception as e:
+            print(
+                f"Error processing results for reception number {reception_number}: {e}")
+
+        # Navigate back to the search page for the next reception number
+        # driver.back()
+
+    except Exception as e:
+        print(f"Error processing reception number {reception_number}: {e}")
+
+    # Close the browser
+    driver.quit()
 
 def search_douglas(query): 
     data_set = {}
@@ -260,6 +369,13 @@ def search_douglas(query):
             sale_date = row.find_all('td')[1].text.strip() if len(row.find_all('td')) > 1 else None
             sale_price = row.find_all('td')[2].text.strip() if len(row.find_all('td')) > 1 else None
             deed_type = row.find_all('td')[3].text.strip() if len(row.find_all('td')) > 2 else None
+
+            # Use reception number to get link to deed document
+            if reception_no:
+                try:
+                    deed_link = process_reception_number_Douglas(reception_no)
+                except:
+                    deed_link = None
             
             # Extract Grantor and Grantee
             sales_details_row = row.find_next('tr', class_='sales-details')
@@ -276,6 +392,7 @@ def search_douglas(query):
             # Store row data in a dictionary
             sales_data.append({
                 'Reception No': reception_no,
+                'Deed Link': deed_link,
                 'Sale Date': sale_date,
                 'Sale Price': sale_price,
                 'Deed Type': deed_type,
