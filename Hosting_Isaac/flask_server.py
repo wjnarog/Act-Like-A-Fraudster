@@ -44,8 +44,8 @@ def query_badams():
     request_data = request.get_json()
     
     # Extract the query from the JSON data
-    # query = request_data.get('query', '').lower()
-    query = "152 Pelican Ave"
+    query = request_data.get('query', '').lower()
+    # query = "152 Pelican Ave"
 
     adams_result = adams.search_adams(query)
 
@@ -57,8 +57,8 @@ def query_boulder():
     request_data = request.get_json()
     
     # Extract the query from the JSON data
-    # query = request_data.get('query', '').lower()
-    query = "6168 Habitat Dr Boulder"
+    query = request_data.get('query', '').lower()
+    # query = "6168 Habitat Dr Boulder"
 
     boulder_result = boulder.search_boulder(query)
 
@@ -70,8 +70,8 @@ def query_denver():
     request_data = request.get_json()
     
     # Extract the query from the JSON data
-    # query = request_data.get('query', '').lower()
-    query = "1645 E MEXICO AVE"
+    query = request_data.get('query', '').lower()
+    # query = "1645 E MEXICO AVE"
 
     maps_query, denver_result = denver.search_denver(query)
 
@@ -83,8 +83,8 @@ def query_douglas():
     request_data = request.get_json()
     
     # Extract the query from the JSON data
-    # query = request_data.get('query', '').lower()
-    query = "4485 E Andover Ave Castle Rock"
+    query = request_data.get('query', '').lower()
+    # query = "4485 E Andover Ave Castle Rock"
 
     douglas_result = douglas.search_douglas(query)
 
@@ -96,8 +96,8 @@ def query_elpaso():
     request_data = request.get_json()
     
     # Extract the query from the JSON data
-    # query = request_data.get('query', '').lower()
-    query = "753 E Moreno Ave"
+    query = request_data.get('query', '').lower()
+    # query = "753 E Moreno Ave"
 
     elpaso_result = elpaso.search_elpaso(query)
 

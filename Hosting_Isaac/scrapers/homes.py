@@ -101,10 +101,10 @@ def search_homes(query):
             property_list.append(property_details)
 
     # Output the scraped information
-    for property in property_list:
-        for key, value in property.items():
-            print(f"{key}: {value}")
-        print()
+    # for property in property_list:
+    #     for key, value in property.items():
+    #         print(f"{key}: {value}")
+    #     print()
 
     driver.quit()
 

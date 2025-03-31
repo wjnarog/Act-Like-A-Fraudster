@@ -48,6 +48,20 @@
     <div id="result"></div>
 
     <script>
+        function copyText(idnum) {
+            elementId = "proprow".concat(idnum);
+
+            var range = document.createRange();
+            range.selectNode(document.getElementById(elementId));
+            window.getSelection().removeAllRanges(); // clear current selection
+            window.getSelection().addRange(range); // to select text
+            document.execCommand("copy");
+            alert("Copied the text: " + window.getSelection());
+            window.getSelection().removeAllRanges(); // to deselect
+        }
+    </script>
+
+    <script>
         document.getElementById('fetchInfo').addEventListener('click', async () => {
             const query = document.getElementById('dropDownCounty').value;
             const siteSelection = document.getElementById('siteSelection').value;
@@ -65,12 +79,16 @@
                     //document.getElementById('result').textContent = `Account Number: ${data['Account Number']}, Owner: ${data.Owner}, Owner's Mailing Address: ${data["Owner's Mailing Address"]}, Property Address: ${data['Property Address']}, City: ${data.City}, State: ${data.State}, Zip Code: ${data["Zip Code"]}, Parcel Number: ${data["Parcel Number"]}, Subdivision: ${data.Subdivision}, Market Area: ${data["Market Area"]}, Square Feet: ${data["Square Feet"]}, Acres: ${data.Acres}, Total Value: ${data["Total Value"]}, Structure Value: ${data["Structure Value"]}, Land Value: ${data["Land Value"]}, Property Tax Estimate: ${data["Property tax estimate"]}, Class: ${data.Class}, Built: ${data.Built}, Number of Rooms: ${data["Number of rooms"]}, Bedrooms: ${data.Bedrooms}, Full Bath: ${data["Full Bath"]}, Three Quarter Bath: ${data["3/4 Bath"]}, Half Bath: ${data["Half Bath"]}, Deed Numbers: ${data["Deed Numbers"].join(", ")}, Zoning: ${data.Zoning}`;
                     //OR
 
-                    var houseInfo = ``;
-                    var i;
-                    for (i in data) {
-                        houseInfo += i + ":" + data[i];
+                    var num_properties = data.length;
+                    var mytable = '<br><br><p class="table-title">RESULTS</p><table class="output-table"><tbody><tr>';
+                    for (var i = 0; i < num_properties; i++) {
+                        mytable += "</tr><tr>";
+                        mytable += `<td>${i + 1}.</td>`;
+                        mytable += `<td id="proprow${i}">${data[i]}</td>`;
+                        mytable += `<td><a href="address.html"><button onclick="copyText(${i})">COPY ADDRESS & GO TO SEARCH</button></a></td>`;
                     }
-                    document.getElementById('result').textContent = houseInfo;
+                    mytable += "</tr></tbody></table><br>";
+                    document.getElementById('result').innerHTML = mytable;
                 } catch (error) {
                     console.error('Error fetching data:', error);
                     document.getElementById('result').textContent = 'Failed to fetch data.';
@@ -90,12 +108,16 @@
                     //document.getElementById('result').textContent = `Account Number: ${data['Account Number']}, Owner: ${data.Owner}, Owner's Mailing Address: ${data["Owner's Mailing Address"]}, Property Address: ${data['Property Address']}, City: ${data.City}, State: ${data.State}, Zip Code: ${data["Zip Code"]}, Parcel Number: ${data["Parcel Number"]}, Subdivision: ${data.Subdivision}, Market Area: ${data["Market Area"]}, Square Feet: ${data["Square Feet"]}, Acres: ${data.Acres}, Total Value: ${data["Total Value"]}, Structure Value: ${data["Structure Value"]}, Land Value: ${data["Land Value"]}, Property Tax Estimate: ${data["Property tax estimate"]}, Class: ${data.Class}, Built: ${data.Built}, Number of Rooms: ${data["Number of rooms"]}, Bedrooms: ${data.Bedrooms}, Full Bath: ${data["Full Bath"]}, Three Quarter Bath: ${data["3/4 Bath"]}, Half Bath: ${data["Half Bath"]}, Deed Numbers: ${data["Deed Numbers"].join(", ")}, Zoning: ${data.Zoning}`;
                     //OR
 
-                    // var houseInfo = ``;
-                    // var i;
-                    // for (i in data) {
-                    //     houseInfo += i + ":" + data[i];
-                    // }
-                    document.getElementById('result').textContent = data;
+                    var num_properties = data.length;
+                    var mytable = '<br><br><p class="table-title">RESULTS</p><table class="output-table"><tbody><tr>';
+                    for (var i = 0; i < num_properties; i++) {
+                        mytable += "</tr><tr>";
+                        mytable += `<td>${i + 1}.</td>`;
+                        mytable += `<td id="proprow${i}">${data[i]}</td>`;
+                        mytable += `<td><a href="address.html"><button onclick="copyText(${i})">COPY ADDRESS & GO TO SEARCH</button></a></td>`;
+                    }
+                    mytable += "</tr></tbody></table><br>";
+                    document.getElementById('result').innerHTML = mytable;
                 } catch (error) {
                     console.error('Error fetching data:', error);
                     document.getElementById('result').textContent = 'Failed to fetch data.';
