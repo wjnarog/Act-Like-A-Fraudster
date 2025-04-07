@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>County Page</title>
+
+    <link href="normalize.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="header">
+        <a href="index.html" class="logo">FIND MY FRAUD</a>
+        <div class="header-right">
+            <a class="active" href="#home">ABOUT</a>
+            <a href="emailgen.html">EMAIL GEN</a>
+            <a href="#contact">NEXT STEPS</a>
+            <a href="#about">COPYRIGHT</a>
+        </div>
+    </div>
+
+    <p class="page-title">AI EMAIL GENERATION</p>
+    <form class="search-form" id="queryForm">
+        <label for="query">Enter an address:</label><br>
+        <input type="text" id="query" name="query">
+        <br><br><br>
+        <button class="search-button" type="button" id="fetchInfo">Get Email</button>
+    </form>
+    <div class="email-display" id="result"></div>
+
+    <script>
+        document.getElementById('fetchInfo').addEventListener('click', async () => {
+            const query = document.getElementById('query').value;
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/query_emailgen', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ query }),
+                });
+                const data = await response.json();
+                document.getElementById('result').innerText = data;
+                // document.getElementById('result').innerHTML = `
+                // <div class="email-display">${data}</div>
+                // `;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                document.getElementById('result').textContent = 'Failed to fetch data.';
+            }
+        });
+    </script>
+</body>
+
+</html>

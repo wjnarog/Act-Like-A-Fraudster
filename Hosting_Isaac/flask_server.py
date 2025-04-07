@@ -12,6 +12,7 @@ from bs4 import BeautifulSoup
 import random
 import time
 from scrapers import adams, boulder, denver, douglas, elpaso, redfin, homes
+from ai import emailgen
 
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
@@ -130,6 +131,22 @@ def query_homes():
     homes_result = homes.search_homes(query)
 
     return jsonify(homes_result)
+
+################
+# AI INTEGRATION
+################
+
+@app.route('/query_emailgen', methods=['POST'])
+def query_emailgen():
+    # Get the JSON data from the request
+    request_data = request.get_json()
+    
+    # Extract the query from the JSON data
+    query = request_data.get('query', '').lower()
+
+    emailgen_result = emailgen.email_generation(query)
+
+    return jsonify(emailgen_result)
 
 #######
 # OTHER
