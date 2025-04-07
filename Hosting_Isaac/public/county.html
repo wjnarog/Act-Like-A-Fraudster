@@ -26,12 +26,12 @@
 
     <p class="page-title">COUNTY SEARCH</p>
     <form class="search-form" id="queryForm">
-        <label for="siteSelection">Choose a listing site:</label><br>
+        <!-- <label for="siteSelection">Choose a listing site:</label><br>
         <select name="siteSelection" id="siteSelection">
             <option value="redfin">Redfin</option>
             <option value="homes">Homes.com</option>
         </select>
-        <br><br>
+        <br><br> -->
         <label for="dropDownCounty">Choose a county:</label><br>
         <input list="counties" name="dropDownCounty" id="dropDownCounty" name="dropDownCounty">
         <datalist id="counties">
@@ -64,7 +64,8 @@
     <script>
         document.getElementById('fetchInfo').addEventListener('click', async () => {
             const query = document.getElementById('dropDownCounty').value;
-            const siteSelection = document.getElementById('siteSelection').value;
+            const siteSelection = "redfin";
+            // const siteSelection = document.getElementById('siteSelection').value;
 
             if (siteSelection == "redfin") {
                 try {
