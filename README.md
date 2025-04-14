@@ -7,7 +7,6 @@
 * [Daniel Evarone](https://github.com/danielevarone) - Test Engineer
 * [Diego Marrero Zilenziger](https://github.com/MariegoZ) - Project Manager
 * [Isaac Kou](https://github.com/isko9924) - Security Engineer
-* [Joseph Westley](https://github.com/jowe6894) - Front-End Developer
 * [Shuchi Shah](https://github.com/Shuchi18) - Security Engineer
 * [Walker Narog](https://github.com/wjnarog) - Security Engineer
 * [Zachary Cook](https://github.com/zaco6003) - Database Engineer
