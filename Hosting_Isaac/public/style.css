@@ -259,6 +259,16 @@ body {
       letter-spacing: 0.05em;
 }
 
+/* NOTICE FONT FORMATTING */
+.notice-font {
+      text-align: center;
+      color: #000000;
+      font-weight: 600;
+      font-size: 1em;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+}
+
 
 /* OUTPUT TABLE FORMATTING */
 /* BASE CODE FROM: https://dev.to/dcodeyt/creating-beautiful-html-tables-with-css-428l */

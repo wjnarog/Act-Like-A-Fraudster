@@ -2,11 +2,57 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 import time
 import re
 
 debug = True
+
+def process_reception_number_Boulder(reception_number):
+     # Initialize the WebDriver
+     driver = webdriver.Chrome()
+     driver.get("https://boulder.co.publicsearch.us/")
+ 
+     # Locate the search box and enter the search term
+     search_box = driver.find_element(
+         By.CSS_SELECTOR, '[data-testid="searchInputBox"]')
+     
+     reception_number = str(reception_number).zfill(8)
+     search_box.send_keys(reception_number)
+     search_box.send_keys(Keys.RETURN)
+ 
+     # Wait for the page to load after submitting the search
+     WebDriverWait(driver, 10).until(
+         EC.presence_of_element_located((By.TAG_NAME, 'tfoot'))
+     )
+ 
+     # Locate the specific row using the unique identifier
+     row = driver.find_element(
+         By.XPATH, f'//tr[contains(., "{reception_number}")]')
+ 
+     # Click anywhere on the row
+     row.click()
+ 
+     # Wait for the image to load
+     WebDriverWait(driver, 10).until(
+         EC.presence_of_element_located((By.TAG_NAME, 'image'))
+     )
+ 
+     # Parse the page source with BeautifulSoup
+     soup = BeautifulSoup(driver.page_source, "html.parser")
+ 
+     # Locate the <image> tag and extract the xlink:href attribute
+     image_tag = soup.find("image", {"class": "css-1tazvte"})
+     if image_tag:
+         href = image_tag.get("xlink:href")
+         return href
+     else:
+         print("Image tag not found.")
+ 
+     # Close the WebDriver
+     driver.close()
 
 def search_boulder(query):
     data_set = {}
@@ -217,9 +263,16 @@ def search_boulder(query):
     
     rows2 = soup.find_all('tr', attrs={"ng-repeat": "deed in deeds"})
     deed_numbers = []
+    index = 0
     for row_j in rows2:
         deed_number = row_j.find('span', class_='ng-binding').text.strip()
         deed_numbers.append(deed_number)
+        try:
+             deed_link = process_reception_number_Boulder(deed_number)
+        except:
+             deed_link = 'Link inaccessible'
+        property_details["deed"+str(index)] = deed_link
+        index += 1
         
     property_details["Deed Numbers"] = deed_numbers
     
@@ -236,5 +289,7 @@ def search_boulder(query):
     if (debug):
         print(data_set)
     
+    driver.quit()
+
     # Return the response as a JSON object
     return (data_set)

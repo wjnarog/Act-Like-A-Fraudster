@@ -27,7 +27,7 @@ def email_generation(query):
         "role": "user",
 
         # Sample payload with generic response
-        "content": "Write me a short email pretending to be from the listing realtor for " + str(property_address)
+        "content": "Generate an email to send to a realtor of a home sale, from the seller. Include the address" + str(property_address) + " in the email and state that you have new banking details ready to send over. Generate bank numbers for Alpine Bank. Signature should be short: just the name."
 
         ### Update to this payload for final model
         # "content": property_address

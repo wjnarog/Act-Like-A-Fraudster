@@ -40,11 +40,12 @@
         <br><br>
         <label for="query">Enter an address:</label><br>
         <input type="text" id="query" name="query">
-        <br><br><br>
+        <br><br>
+        <p class="notice-font">TIP: FOR BEST RESULTS, INCLUDE ONLY STREET ADDRESS, NOT CITY OR ZIP CODE.</p>
+        <br>
         <button class="search-button" type="button" id="fetchInfo">Get Info</button>
     </form>
     <br><br>
-    <p class="table-subtitle">TIP: FOR BEST RESULTS, INCLUDE ONLY STREET ADDRESS, NOT CITY OR ZIP CODE.</p>
     <div id="result"></div>
 
     <script>
@@ -282,7 +283,8 @@
                         body: JSON.stringify({ query }),
                     });
                     const data = await response.json();
-                    document.getElementById('result').innerHTML = `
+                    // document.getElementById('result').innerHTML = `
+                    var mytable = `
                     <br><br>
                     <p class="table-title">RESULTS</p>
                     <table class="output-table">
@@ -388,6 +390,17 @@
                         </tr>
                     </table>
                     <br>
+                    `;
+                    var num_properties = data['Deed Numbers'].length;
+                    mytable += '<br><br><p class="table-subtitle">DEED LINKS</p><table class="output-table"><tbody><tr>';
+                    for (var i = 0; i < num_properties; i++) {
+                        mytable += "</tr><tr>";
+                        mytable += `<td>${i + 1}.</td>`;
+                        mytable += `<td id="proprow${i}"><a href="${data['deed'+JSON.stringify(i)]}">${data['deed'+JSON.stringify(i)]}</a></td>`;
+                        // mytable += `<img src=""><br>`;
+                    }
+                    mytable += "</tr></tbody></table><br><br>";
+                    mytable += `
                     <p class="table-subtitle">MAP LOCATION</p>
                     <iframe
                         class="google-maps"
@@ -401,6 +414,8 @@
                         &q={{ ${data['Property Address']} | replace(' ', '+') }}">
                     </iframe>
                     <br>
+                    `;
+                    mytable += `
                     <p class="table-title">SO WHAT CAN I DO?</p>
                     <p class="table-subtitle">Title fraud can be prevented with use of the software <span class="blue-text">SecureMyTransaction</span>.</p>
                     <p class="table-subtitle">Find out more <a href="https://securemytransaction.com" class="green-text">HERE</a>.</p>
@@ -410,6 +425,7 @@
                     <br>
                     <br>
                     `;
+                    document.getElementById('result').innerHTML = mytable;
                 } catch (error) {
                     console.error('Error fetching data:', error);
                     document.getElementById('result').textContent = 'Failed to fetch data.';
