@@ -1,2 +1,5 @@
 [submodule "Deep-Live-Cam"]
 
+[submodule "Deep-Live-Cam-v2"]
+	path = Deep-Live-Cam-v2
+	url = https://github.com/MariegoZ/Deep-Live-Cam.git
