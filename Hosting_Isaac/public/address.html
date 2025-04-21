@@ -64,7 +64,7 @@
                         body: JSON.stringify({ query }),
                     });
                     const data = await response.json();
-                    document.getElementById('result').innerHTML = `
+                    var mytable = `
                     <br><br>
                     <p class="table-title">RESULTS</p>
                     <table class="output-table">
@@ -245,7 +245,23 @@
                             <td>${data['Zoning']}</td>
                         </tr>
                     </table>
-                    <br>
+                    <br>`;
+                    var num_properties = data['Number of Deeds'];
+                    mytable += '<br><br><p class="table-subtitle">DEED LINKS</p><table class="output-table"><tbody><tr>';
+                    var counter = 0;
+                    for (var i = 0; i < num_properties; i++) {
+                        if (data['deed'+JSON.stringify(i)]) {
+                            mytable += "</tr><tr>";
+                            mytable += `<td>${counter + 1}.</td>`;
+                            mytable += `<td id="proprow${i}"><a href="${data['deed'+JSON.stringify(i)]}">${data['deed'+JSON.stringify(i)]}</a></td>`;
+                            counter += 1;
+                        };
+                        // else {
+                        //     mytable += `<td id="proprow${i}"><a href="${data['deed'+JSON.stringify(i)]}">${data['deed'+JSON.stringify(i)]}</a></td>`;
+                        // };
+                    };
+                    mytable += "</tr></tbody></table><br><br>";
+                    mytable += `
                     <p class="table-subtitle">MAP LOCATION</p>
                     <iframe
                         class="google-maps"
@@ -268,6 +284,7 @@
                     <br>
                     <br>
                     `;
+                    document.getElementById('result').innerHTML = mytable;
                 } catch (error) {
                     console.error('Error fetching data:', error);
                     document.getElementById('result').textContent = 'Failed to fetch data.';
@@ -283,7 +300,6 @@
                         body: JSON.stringify({ query }),
                     });
                     const data = await response.json();
-                    // document.getElementById('result').innerHTML = `
                     var mytable = `
                     <br><br>
                     <p class="table-title">RESULTS</p>
@@ -397,7 +413,6 @@
                         mytable += "</tr><tr>";
                         mytable += `<td>${i + 1}.</td>`;
                         mytable += `<td id="proprow${i}"><a href="${data['deed'+JSON.stringify(i)]}">${data['deed'+JSON.stringify(i)]}</a></td>`;
-                        // mytable += `<img src=""><br>`;
                     }
                     mytable += "</tr></tbody></table><br><br>";
                     mytable += `
