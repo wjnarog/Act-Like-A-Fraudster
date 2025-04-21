@@ -256,9 +256,6 @@
                             mytable += `<td id="proprow${i}"><a href="${data['deed'+JSON.stringify(i)]}">${data['deed'+JSON.stringify(i)]}</a></td>`;
                             counter += 1;
                         };
-                        // else {
-                        //     mytable += `<td id="proprow${i}"><a href="${data['deed'+JSON.stringify(i)]}">${data['deed'+JSON.stringify(i)]}</a></td>`;
-                        // };
                     };
                     mytable += "</tr></tbody></table><br><br>";
                     mytable += `
@@ -410,10 +407,12 @@
                     var num_properties = data['Deed Numbers'].length;
                     mytable += '<br><br><p class="table-subtitle">DEED LINKS</p><table class="output-table"><tbody><tr>';
                     for (var i = 0; i < num_properties; i++) {
-                        mytable += "</tr><tr>";
-                        mytable += `<td>${i + 1}.</td>`;
-                        mytable += `<td id="proprow${i}"><a href="${data['deed'+JSON.stringify(i)]}">${data['deed'+JSON.stringify(i)]}</a></td>`;
-                    }
+                        if (data['deed'+JSON.stringify(i)] != "Link inaccessible") {
+                            mytable += "</tr><tr>";
+                            mytable += `<td>${i + 1}.</td>`;
+                            mytable += `<td id="proprow${i}"><a href="${data['deed'+JSON.stringify(i)]}">${data['deed'+JSON.stringify(i)]}</a></td>`;
+                        };
+                    };
                     mytable += "</tr></tbody></table><br><br>";
                     mytable += `
                     <p class="table-subtitle">MAP LOCATION</p>

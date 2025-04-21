@@ -115,7 +115,7 @@ def process_reception_number_Adams(reception_number):
     # Close the browser
     driver.quit()
 
-def scrape_property_info(address_to_search):
+def search_adams(address_to_search):
     data_set = {}
     # Initialize the Chrome WebDriver
     driver = webdriver.Chrome()
@@ -319,6 +319,8 @@ def scrape_property_info(address_to_search):
                 
             sale_data.append(sale_dict)
             index += 1
+
+            sale_data.append({'Number of Deeds': index})
 
     if sale_data:
         for sale in sale_data:

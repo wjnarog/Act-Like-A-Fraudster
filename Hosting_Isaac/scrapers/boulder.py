@@ -270,7 +270,7 @@ def search_boulder(query):
         try:
             deed_link = process_reception_number_Boulder(deed_number)
         except:
-            deed_link = 'could not grab link'
+            deed_link = 'Link inaccessible'
         property_details["deed"+str(index)] = deed_link
         index += 1
         
