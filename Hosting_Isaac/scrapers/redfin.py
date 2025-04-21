@@ -11,8 +11,7 @@ import time
 import re
 
 
-def search_redfin(county_to_search):
-    data_set = {}
+def search_redfin(query):
     chrome_options = Options()
 
     # chrome_options.add_argument("--headless")  # Run headless
@@ -24,7 +23,7 @@ def search_redfin(county_to_search):
     driver = webdriver.Chrome(service=Service(), options=chrome_options)
     driver.get("https://www.redfin.com/")
 
-    search_term = county_to_search
+    search_term = query
 
     # search_input = driver.find_element(By.ID, "search-box-input")
     search_input = WebDriverWait(driver, 10).until(
@@ -66,10 +65,10 @@ def search_redfin(county_to_search):
         address_text = address.text.strip()
         addresses.append(address_text)
 
-    for index, address in enumerate(addresses, start=1):
-        data_set["home"+str(index)] = address
+    driver.quit()
+    print(addresses)
 
-    return data_set
+    return (addresses)
 
 
 
