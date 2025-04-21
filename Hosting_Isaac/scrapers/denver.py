@@ -26,12 +26,12 @@ def search_denver(query):
     search_input.send_keys(Keys.RETURN)
     
     # Wait for the table to be visible
-    results_table = WebDriverWait(driver, 10).until(
+    results_table = WebDriverWait(driver, 3).until(
         EC.presence_of_element_located((By.ID, "results_table"))
     )
     
     # Wait for the first link to be clickable
-    search_result_link = WebDriverWait(driver, 10).until(
+    search_result_link = WebDriverWait(driver, 3).until(
         EC.element_to_be_clickable((By.CLASS_NAME, "search-result-link"))
     )
     search_result_link = driver.find_element(By.CLASS_NAME, "search-result-link")
@@ -251,9 +251,5 @@ def search_denver(query):
     for key, value in property_details.items():
             data_set[key] = value
 
-    # Close the driver after scraping
-    driver.quit()
-
     # Return the response as a JSON object
-    print(data_set)
-    return [query, data_set]
+    return (data_set)

@@ -7,9 +7,10 @@ from selenium.webdriver.common.action_chains import ActionChains
 from bs4 import BeautifulSoup
 import time
 
-debug = True
 
-def search_homes(query):
+def search_homes(county_to_search):
+    data_set = {}
+    
     # Initialize the browser
     driver = webdriver.Chrome()
 
@@ -23,20 +24,20 @@ def search_homes(query):
 
     # Locate the search box using the class name
     search_box = WebDriverWait(driver, 20).until(
-        EC.element_to_be_clickable((By.CLASS_NAME, "multiselect-search"))  # Adjust if needed
+        EC.element_to_be_clickable(
+            (By.CLASS_NAME, "multiselect-search"))  # Adjust if needed
     )
 
     # Ensure the input is in view and interactable
     driver.execute_script("arguments[0].scrollIntoView();", search_box)
 
     # Send search query
-    search_term = query + " county colorado"
-    search_box.send_keys(search_term)
+    search_box.send_keys(county_to_search)
     search_box.send_keys(Keys.RETURN)
 
     # Wait for the initial results container to load
     WebDriverWait(driver, 10).until(
-        EC.presence_of_element_located((By.ID, "placardContainer")) 
+        EC.presence_of_element_located((By.ID, "placardContainer"))
     )
 
     # Now capture the page source after the search has resulted in new content
@@ -44,11 +45,6 @@ def search_homes(query):
 
     # Parse the page with BeautifulSoup
     soup = BeautifulSoup(page_source, 'html.parser')
-
-    print(soup.title.text)
-
-    # Close the browser
-    # driver.quit()
 
     # Extract the information from the placard-container
     property_list = []
@@ -76,14 +72,13 @@ def search_homes(query):
                 elif "Sq Ft" in text:
                     property_details['sq_ft'] = text
 
-        
-
         # Extract the property address
         address = placard.find('p', class_='property-name').text.strip()
         property_details['address'] = address
 
         # Extract the description of the property
-        description = placard.find('p', class_='property-description').text.strip()
+        description = placard.find(
+            'p', class_='property-description').text.strip()
         property_details['description'] = description
 
         agent = placard.find('div', class_='agent-info-container')
@@ -91,7 +86,8 @@ def search_homes(query):
             # Extract agent information
             agent_name = placard.find('p', class_='agent-name').text.strip()
             agency_name = placard.find('p', class_='agency-name').text.strip()
-            agent_number = placard.find('p', class_='agency-number').text.strip()
+            agent_number = placard.find(
+                'p', class_='agency-number').text.strip()
 
             property_details['Agent Name'] = agent_name
             property_details['Agency Number'] = agency_name
@@ -101,11 +97,10 @@ def search_homes(query):
             property_list.append(property_details)
 
     # Output the scraped information
-    # for property in property_list:
-    #     for key, value in property.items():
-    #         print(f"{key}: {value}")
-    #     print()
-
+    index = 0
+    for property in property_list:
+        data_set["property"+str(index)] = property
+        index += 1
+            
     driver.quit()
-
-    return property_list
+    return data_set
