@@ -24,6 +24,7 @@ def search_redfin(query):
     driver.get("https://www.redfin.com/")
 
     search_term = query
+    search_term += " County, Colorado"
 
     # search_input = driver.find_element(By.ID, "search-box-input")
     search_input = WebDriverWait(driver, 10).until(
