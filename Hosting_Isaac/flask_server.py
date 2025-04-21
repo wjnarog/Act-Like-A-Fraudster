@@ -40,7 +40,7 @@ data = {
 ######################
 
 @app.route('/query_adams', methods=['POST'])
-def query_badams():
+def query_adams():
     # Get the JSON data from the request
     request_data = request.get_json()
     
