@@ -12,7 +12,7 @@ from bs4 import BeautifulSoup
 import random
 import time
 from scrapers import adams, boulder, denver, douglas, elpaso, redfin, homes
-from ai import emailgen
+#from ai import emailgen
 
 # Flask constructor takes the name of 
 # current module (__name__) as argument.
