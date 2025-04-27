@@ -33,5 +33,5 @@ Key components include:
 If creating a static video (not using video feed for real-time alteration), the user will be prompted to select a directory within which to store 
       the output.
 
-* We did not test the paid version of the model, it may be the case that performance is much better since it claims to improve quality
+* We did not test the paid version of the model; it may be the case that performance is much better since it claims to improve quality
     and user experience.
