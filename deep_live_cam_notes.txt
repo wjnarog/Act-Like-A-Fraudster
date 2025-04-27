@@ -3,6 +3,7 @@ The "Deep-Live-Cam" folder is a subdirectory within our main repository. It orig
     and embedded into our main project repo.
 A description of the original repository exists within the submodule folder in the "README" file.
 Submodules have specific commands in order to initialize and effect changes, please refer to "https://git-scm.com/book/en/v2/Git-Tools-Submodules".
+The original repository can be found here: https://github.com/hacksider/Deep-Live-Cam.git
 
 Model Setup:
 The "README" file maintains a reference to a prepackaged version of the model accessible for a monthly fee as well as insitallation 
