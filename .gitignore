@@ -1,6 +1,6 @@
 .DS_Store
-Hosting_Isaac/.DS_Store
-Hosting_Isaac/scrapers/__pycache__
-Hosting_Isaac/public/API_KEY.js
-Hosting_Isaac/ai/__pycache__
-Hosting_Isaac/ai/API_KEY.py
+Webpage/.DS_Store
+Webpage/scrapers/__pycache__
+Webpage/public/API_KEY.js
+Webpage/ai/__pycache__
+Webpage/ai/API_KEY.py
