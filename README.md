@@ -22,4 +22,40 @@
 `webScrapingResearch/`: Folder containing any research into webscraping tools.<br>
 `README.md`: Project description and overview.<br><br>
 
-
+# Documentation of the Website and the Backend
+## Getting a Local Copy Up and Running
+### Files needed:
+* Files We Provide You:
+- `flask_server.py`
+- `server.js`
+- scrapers 
+  - `adams.py`
+  - `boulder.py`
+  - `denver.py`
+  - `douglas.py`
+  - `elpaso.py`
+  - `homes.py`
+  - `redfin.py`
+- public
+  - `about.html`
+  - `about.html`
+  - `address.html`
+  - `copyright.html`
+  - `county.html`
+  - `emailgen.html`
+  - `index.html`
+  - `nextsteps.html`
+  - `normalize.css`
+  - `style.css`
+- ai
+  - `emailgen.py`
+* Files We Also Provide, but You Can Generate
+- `package-lock.json`
+- `package.json`
+- node_modules
+  - Check inside the github repository
+* Files you will need to make on your own
+  - public
+    - `API_KEY.js`
+  - ai
+    - `API_KEY.py`
