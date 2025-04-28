@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Act Like A Fraudster - County Search</title>
+
+    <link href="normalize.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div class="header">
+        <a href="index.html" class="logo">ACT LIKE A FRAUDSTER</a>
+        <div class="header-right">
+            <a class="active" href="about.html">ABOUT</a>
+            <a href="emailgen.html">EMAIL GEN</a>
+            <a href="nextsteps.html">NEXT STEPS</a>
+            <a href="copyright.html">COPYRIGHT</a>
+        </div>
+    </div>
+
+    <p class="page-title">COUNTY SEARCH</p>
+    <form class="search-form" id="queryForm">
+        <!-- <label for="siteSelection">Choose a listing site:</label><br>
+        <select name="siteSelection" id="siteSelection">
+            <option value="redfin">Redfin</option>
+            <option value="homes">Homes.com</option>
+        </select>
+        <br><br> -->
+        <label for="dropDownCounty">Choose a county:</label><br>
+        <input list="counties" name="dropDownCounty" id="dropDownCounty" name="dropDownCounty">
+        <datalist id="counties">
+            <option value="Adams"></option>
+            <option value="Boulder"></option>
+            <option value="Denver"></option>
+            <option value="Douglas"></option>
+            <option value="El Paso"></option>
+        </datalist>
+        </input>
+        <br><br><br>
+        <button class="search-button" type="button" id="fetchInfo">Get Properties</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        function copyText(idnum) {
+            elementId = "proprow".concat(idnum);
+
+            var range = document.createRange();
+            range.selectNode(document.getElementById(elementId));
+            window.getSelection().removeAllRanges(); // clear current selection
+            window.getSelection().addRange(range); // to select text
+            document.execCommand("copy");
+            alert("Copied the text: " + window.getSelection());
+            window.getSelection().removeAllRanges(); // to deselect
+        }
+    </script>
+
+    <script>
+        document.getElementById('fetchInfo').addEventListener('click', async () => {
+            const query = document.getElementById('dropDownCounty').value;
+            const siteSelection = "redfin";
+            // const siteSelection = document.getElementById('siteSelection').value;
+
+            if (siteSelection == "redfin") {
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/query_redfin', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ query }),
+                    });
+                    const data = await response.json();
+                    //document.getElementById('result').textContent = `Account Number: ${data['Account Number']}, Owner: ${data.Owner}, Owner's Mailing Address: ${data["Owner's Mailing Address"]}, Property Address: ${data['Property Address']}, City: ${data.City}, State: ${data.State}, Zip Code: ${data["Zip Code"]}, Parcel Number: ${data["Parcel Number"]}, Subdivision: ${data.Subdivision}, Market Area: ${data["Market Area"]}, Square Feet: ${data["Square Feet"]}, Acres: ${data.Acres}, Total Value: ${data["Total Value"]}, Structure Value: ${data["Structure Value"]}, Land Value: ${data["Land Value"]}, Property Tax Estimate: ${data["Property tax estimate"]}, Class: ${data.Class}, Built: ${data.Built}, Number of Rooms: ${data["Number of rooms"]}, Bedrooms: ${data.Bedrooms}, Full Bath: ${data["Full Bath"]}, Three Quarter Bath: ${data["3/4 Bath"]}, Half Bath: ${data["Half Bath"]}, Deed Numbers: ${data["Deed Numbers"].join(", ")}, Zoning: ${data.Zoning}`;
+                    //OR
+
+                    var num_properties = data.length;
+                    var mytable = '<br><br><p class="table-title">RESULTS</p><table class="output-table"><tbody><tr>';
+                    for (var i = 0; i < num_properties; i++) {
+                        mytable += "</tr><tr>";
+                        mytable += `<td>${i + 1}.</td>`;
+                        mytable += `<td id="proprow${i}">${data[i]}</td>`;
+                        mytable += `<td><a href="address.html"><button onclick="copyText(${i})">COPY ADDRESS & GO TO SEARCH</button></a></td>`;
+                    }
+                    mytable += "</tr></tbody></table><br>";
+                    document.getElementById('result').innerHTML = mytable;
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    document.getElementById('result').textContent = 'Failed to fetch data.';
+                }
+            }
+            else if (siteSelection == "homes") {
+                // TODO - make sure this works
+                try {
+                    const response = await fetch('http://127.0.0.1:5000/query_homes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ query }),
+                    });
+                    const data = await response.json();
+                    //document.getElementById('result').textContent = `Account Number: ${data['Account Number']}, Owner: ${data.Owner}, Owner's Mailing Address: ${data["Owner's Mailing Address"]}, Property Address: ${data['Property Address']}, City: ${data.City}, State: ${data.State}, Zip Code: ${data["Zip Code"]}, Parcel Number: ${data["Parcel Number"]}, Subdivision: ${data.Subdivision}, Market Area: ${data["Market Area"]}, Square Feet: ${data["Square Feet"]}, Acres: ${data.Acres}, Total Value: ${data["Total Value"]}, Structure Value: ${data["Structure Value"]}, Land Value: ${data["Land Value"]}, Property Tax Estimate: ${data["Property tax estimate"]}, Class: ${data.Class}, Built: ${data.Built}, Number of Rooms: ${data["Number of rooms"]}, Bedrooms: ${data.Bedrooms}, Full Bath: ${data["Full Bath"]}, Three Quarter Bath: ${data["3/4 Bath"]}, Half Bath: ${data["Half Bath"]}, Deed Numbers: ${data["Deed Numbers"].join(", ")}, Zoning: ${data.Zoning}`;
+                    //OR
+
+                    var num_properties = data.length;
+                    var mytable = '<br><br><p class="table-title">RESULTS</p><table class="output-table"><tbody><tr>';
+                    for (var i = 0; i < num_properties; i++) {
+                        mytable += "</tr><tr>";
+                        mytable += `<td>${i + 1}.</td>`;
+                        mytable += `<td id="proprow${i}">${data[i]}</td>`;
+                        mytable += `<td><a href="address.html"><button onclick="copyText(${i})">COPY ADDRESS & GO TO SEARCH</button></a></td>`;
+                    }
+                    mytable += "</tr></tbody></table><br>";
+                    document.getElementById('result').innerHTML = mytable;
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    document.getElementById('result').textContent = 'Failed to fetch data.';
+                }
+            }
+            else {
+                document.getElementById('result').innerHTML = '<br><p class="table-subtitle">Site not currently supported.<p>';
+            }
+
+        });
+    </script>
+</body>
+
+</html>
