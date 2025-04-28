@@ -1,1 +1,1 @@
-let api_data = {"APIKEY": "AIzaSyBxQ8VcFzRM-9zlAze638SCfoEsfjhaLDM"}
+let api_data = {"APIKEY": ""}
