@@ -1,6 +1,7 @@
 # <ins>Act-Like-A-Fraudster<ins>
 ### 2024 - 2025 CU Boulder Software Engineering Capstone - Sponsored by Alliant National.<br>
-...explanation of project...
+Act Like a Fraudster is a cutting-edge platform designed to expose and combat title fraud in real estate transactions. By simulating modern fraud tactics—like phishing emails and deep fake videos—it educates users on how scammers exploit public property data. With a robust tech stack including web scraping, AI, and secure hosting, this tool equips buyers, lenders, and title professionals with the knowledge and resources needed to prevent costly fraud and protect their investments.
+
 
 
 ## Team:
