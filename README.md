@@ -102,3 +102,20 @@ Linux/Mac<br>
 `pip install bs4` <br>
 `pip install azure.ai.inference` <br>
 
+## Running the Website
+Open two terminals <br>
+Navigate to /Hosting_Isaac in both terminals<br>
+In the first one, run <br>
+	`node server.js`<br>
+And verify that the output is something like<br>
+	`node.js server running at http://localhost:3000`<br>
+<br>
+In the second one, run<br> 
+Windows → `python3 flask_server.py`<br>
+Mac/Linux → `python flask_server.py`<br>
+And verify that the output is something like:<br>
+	`WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.`
+ `* Running on http://127.0.0.1:5000`<br>
+`Press CTRL+C to quit`<br>
+`127.0.0.1 - - [21/Apr/2025 14:45:45] "GET / HTTP/1.1" 200 -`<br>
+`127.0.0.1 - - [21/Apr/2025 14:45:58] "OPTIONS /query_redfin HTTP/1.1" 200 -`<br>
