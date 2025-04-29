@@ -256,6 +256,9 @@
                             mytable += `<td id="proprow${i}"><a href="${data['deed'+JSON.stringify(i)]}">${data['deed'+JSON.stringify(i)]}</a></td>`;
                             counter += 1;
                         };
+                        // else {
+                        //     mytable += `<td id="proprow${i}"><a href="${data['deed'+JSON.stringify(i)]}">${data['deed'+JSON.stringify(i)]}</a></td>`;
+                        // };
                     };
                     mytable += "</tr></tbody></table><br><br>";
                     mytable += `
@@ -407,12 +410,10 @@
                     var num_properties = data['Deed Numbers'].length;
                     mytable += '<br><br><p class="table-subtitle">DEED LINKS</p><table class="output-table"><tbody><tr>';
                     for (var i = 0; i < num_properties; i++) {
-                        if (data['deed'+JSON.stringify(i)] != "Link inaccessible") {
-                            mytable += "</tr><tr>";
-                            mytable += `<td>${i + 1}.</td>`;
-                            mytable += `<td id="proprow${i}"><a href="${data['deed'+JSON.stringify(i)]}">${data['deed'+JSON.stringify(i)]}</a></td>`;
-                        };
-                    };
+                        mytable += "</tr><tr>";
+                        mytable += `<td>${i + 1}.</td>`;
+                        mytable += `<td id="proprow${i}"><a href="${data['deed'+JSON.stringify(i)]}">${data['deed'+JSON.stringify(i)]}</a></td>`;
+                    }
                     mytable += "</tr></tbody></table><br><br>";
                     mytable += `
                     <p class="table-subtitle">MAP LOCATION</p>
@@ -454,114 +455,19 @@
                         },
                         body: JSON.stringify({ query }),
                     });
-                    const [maps_query, data] = await response.json();
+                    const data = await response.json();
                     document.getElementById('result').innerHTML = `
                     <br><br>
                     <p class="table-title">RESULTS</p>
                     <table class="output-table">
                         <tr>
-                            <td>Year</td>
-                            <td>${data['Year']}</td>
-                        </tr>
+                            <td>Link to report</td>
+                            <td><a href="${data.Report}">${data.Report}</a></td>
                         <tr>
-                            <td>Type</td>
-                            <td>${data['Type']}</td>
-                        </tr>
-                        <tr>
-                            <td>Actual Value</td>
-                            <td>${data["Actual"]}</td>
-                        </tr>
-                        <tr>
-                            <td>Assessed Value</td>
-                            <td>${data['Assessed']}</td>
-                        </tr>
-                        <tr>
-                            <td>Exempt</td>
-                            <td>${data['Exempt']}</td>
-                        </tr>
-                        <tr>
-                            <td>Reception Number</td>
-                            <td>${data['Reception Number']}</td>
-                        </tr>
-                        <tr>
-                            <td>Reception Date</td>
-                            <td>${data['Reception Date']}</td>
-                        </tr>
-                        <tr>
-                            <td>Instrument</td>
-                            <td>${data['Instrument']}</td>
-                        </tr>
-                        <tr>
-                            <td>Sale Date</td>
-                            <td>${data['Sale Date']}</td>
-                        </tr>
-                        <tr>
-                            <td>Sale Price</td>
-                            <td>${data['Sale Price']}</td>
-                        </tr>
-                        <tr>
-                            <td>Grantor</td>
-                            <td>${data['Grantor']}</td>
-                        </tr>
-                        <tr>
-                            <td>Grantee</td>
-                            <td>${data['Grantee']}</td>
-                        </tr>
-                        <tr>
-                            <td>Style</td>
-                            <td>${data['Style']}</td>
-                        </tr>
-                        <tr>
-                            <td>Building Sqr. Foot</td>
-                            <td>${data['Building Sqr. Foot']}</td>
-                        </tr>
-                        <tr>
-                            <td>Bedrooms</td>
-                            <td>${data['Bedrooms']}</td>
-                        </tr>
-                        <tr>
-                            <td>Baths Full/Half</td>
-                            <td>${data['Baths Full/Half']}</td>
-                        </tr>
-                        <tr>
-                            <td>Effective Year Built</td>
-                            <td>${data['Effective Year Built']}</td>
-                        </tr>
-                        <tr>
-                            <td>Basement/Finish</td>
-                            <td>${data['Basement/Finish']}</td>
-                        </tr>
-                        <tr>
-                            <td>Lot Size</td>
-                            <td>${data['Lot Size']}</td>
-                        </tr>
-                        <tr>
-                            <td>Zoned As</td>
-                            <td>${data['Zoned As']}</td>
-                        </tr>
-                        <tr>
-                            <td>Mill Levy</td>
-                            <td>${data['Mill Levy']}</td>
-                        </tr>
-                        <tr>
-                            <td>Document Type</td>
-                            <td>${data['Document Type']}</td>
-                        </tr>
+                      
                     </table>
                     <br>
-                    <p class="table-subtitle">MAP LOCATION</p>
-                    <iframe
-                        class="google-maps"
-                        width="600"
-                        height="450"
-                        style="border:1px solid black"
-                        loading="lazy"
-                        allowfullscreen
-                        referrerpolicy="no-referrer-when-downgrade"
-                        src="https://www.google.com/maps/embed/v1/place?key=${api_key}
-                        &q={{ ${ JSON.stringify(maps_query) } | replace(' ', '+') }}">
-                    </iframe>
-                    <br>
+                    
                     <p class="table-title">SO WHAT CAN I DO?</p>
                     <p class="table-subtitle">Title fraud can be prevented with use of the software <span class="blue-text">SecureMyTransaction</span>.</p>
                     <p class="table-subtitle">Find out more <a href="https://securemytransaction.com" class="green-text">HERE</a>.</p>
@@ -572,8 +478,6 @@
                     <br>
                     `;
                     // TODO - figure out passing address from query to Google Maps API
-                    console.log(maps_query);
-                    console.log(JSON.stringify(maps_query));
                 } catch (error) {
                     console.error('Error fetching data:', error);
                     document.getElementById('result').textContent = 'Failed to fetch data.';
@@ -716,95 +620,10 @@
                     <p class="table-title">RESULTS</p>
                     <table class="output-table">
                         <tr>
-                            <td>Owner</td>
-                            <td>${data['Owner:']}</td>
-                        </tr>
-                        <tr>
-                            <td>Mailing Address</td>
-                            <td>${data['Mailing Address:']}</td>
-                        </tr>
-                        <tr>
-                            <td>Location</td>
-                            <td>${data['Location:']}</td>
-                        </tr>
-                        <tr>
-                            <td>Tax Status</td>
-                            <td>${data['Tax Status:']}</td>
-                        </tr>
-                        <tr>
-                            <td>Zoning</td>
-                            <td>${data['Zoning:']}</td>
-                        </tr>
-                        <tr>
-                            <td>Plat Number</td>
-                            <td>${data['Plat No:']}</td>
-                        </tr>
-                        <tr>
-                            <td>Legal Description</td>
-                            <td>${data['Legal Description:']}</td>
-                        </tr>
-                        <tr>
-                            <td>Market Value Land</td>
-                            <td>${data['Market Value Land']}</td>
-                        </tr>
-                        <tr>
-                            <td>Market Value Improvement</td>
-                            <td>${data['Market Value Improvement']}</td>
-                        </tr>
-                        <tr>
-                            <td>Market Value Total</td>
-                            <td>${data['Market Value Total']}</td>
-                        </tr>
-                        <tr>
-                            <td>Assessed Key Land</td>
-                            <td>${data['Assessed Key Land']}</td>
-                        </tr>
-                        <tr>
-                            <td>Assessed Key Improvement</td>
-                            <td>${data['Assessed Key Improvement']}</td>
-                        </tr>
-                        <tr>
-                            <td>Assessed Key Total</td>
-                            <td>${data['Assessed Key Total']}</td>
+                            <td>Link to report</td>
+                            <td><a href="${data.Report}">${data.Report}</a></td>
                         </tr>
                     </table>
-                    <br>
-                    <p class="table-subtitle">LAND INFO</p>
-                    <table class="output-table">
-                        <tr>
-                            <td>Sequence Number</td>
-                            <td>${data['landinfo0']['Sequence Number']}</td>
-                        </tr>
-                        <tr>
-                            <td>Land Use</td>
-                            <td>${data['landinfo0']['Land Use']}</td>
-                        </tr>
-                        <tr>
-                            <td>Assessment Rate</td>
-                            <td>${data['landinfo0']['Assessment Rate']}</td>
-                        </tr>
-                        <tr>
-                            <td>Area</td>
-                            <td>${data['landinfo0']['Area']}</td>
-                        </tr>
-                        <tr>
-                            <td>Market Value</td>
-                            <td>${data['landinfo0']['Market Value']}</td>
-                        </tr>
-                    </table>
-                    <br>
-                    <p class="table-subtitle">MAP LOCATION</p>
-                    <iframe
-                        class="google-maps"
-                        width="600"
-                        height="450"
-                        style="border:1px solid black"
-                        loading="lazy"
-                        allowfullscreen
-                        referrerpolicy="no-referrer-when-downgrade"
-                        src="https://www.google.com/maps/embed/v1/place?key=${api_key}
-                        &q={{ ${data['Mailing Address:']} | replace(' ', '+') }}">
-                    </iframe>
                     <br>
                     <p class="table-title">SO WHAT CAN I DO?</p>
                     <p class="table-subtitle">Title fraud can be prevented with use of the software <span class="blue-text">SecureMyTransaction</span>.</p>
@@ -817,7 +636,7 @@
                     `;
                 } catch (error) {
                     console.error('Error fetching data:', error);
-                    document.getElementById('result').innerHTML = '<br><p class="table-subtitle">Failed to fetch data.</p>';
+                    document.getElementById('result').textContent = 'Failed to fetch data.';;
                 }
             }
             // TODO - Other county scrapers
