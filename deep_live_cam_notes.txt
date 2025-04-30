@@ -1,37 +1,38 @@
 Model Structure:
-The "Deep-Live-Cam" folder is a subdirectory within our main repository. It originates from its own github repository that was forked
-    and embedded into our main project repo.
-A description of the original repository exists within the submodule folder in the "README" file.
-Submodules have specific commands in order to initialize and effect changes, please refer to "https://git-scm.com/book/en/v2/Git-Tools-Submodules".
-The original repository can be found here: https://github.com/hacksider/Deep-Live-Cam.git
+    The "Deep-Live-Cam" folder is a subdirectory within our main repository. It originates from its own github repository that was forked
+        and embedded into our main project repo.
+    A description of the original repository exists within the submodule folder in the "README" file.
+    Submodules have specific commands in order to initialize and effect changes, please refer to "https://git-scm.com/book/en/v2/Git-Tools-Submodules".
+    The original repository can be found here: https://github.com/hacksider/Deep-Live-Cam.git
 
 Model Setup:
-The "README" file maintains a reference to a prepackaged version of the model accessible for a monthly fee as well as installation  
-    instruction for a free version under the "Installation (Manual)" section.
-We highly recommend following all the suggested steps since compatibility issues may arise otherwise. One such example would be to use python
-    3.10 as opposed to newer versions to maintain functionality with onnxruntime version requirements. 
-There are two main methods of operating the model: via CPU or GPU. Enabling GPU will improve model performance but the instructions are
-    limited to those developed by NVIDIA.
-Remember to download the specified models and store them in the appropriate folder in addition to meeting the requirements
-    listed in the "requirements.txt" file.
-Upon completion of installation instructions, it is recommended to restart the machine, especially if CUDA was installed to enable the GPU.
-The model is not perfect and still in active development so it may require some platform/environment specific troubleshooting.
-From experience, installing ffmpeg, visual studio, and NVIDIA's CUDA can be points of confusion but they are addressed in the example.
-The following link is to a video that, although not the most professional, provides a step-by-step guide to installing
-    and running Deep-Live-Cam for Windows 11: https://youtu.be/f5DA7LYCoPQ?si=FnNvqV9nuUMxMrRn&t=123
+    The "README" file maintains a reference to a prepackaged version of the model accessible for a monthly fee as well as installation  
+        instruction for a free version under the "Installation (Manual)" section.
+    We highly recommend following all the suggested steps since compatibility issues may arise otherwise. One such example would be to use python
+        3.10 as opposed to newer versions to maintain functionality with onnxruntime version requirements. 
+    There are two main methods of operating the model: via CPU or GPU. Enabling GPU will improve model performance but the instructions are
+        limited to those developed by NVIDIA.
+    Remember to download the specified models and store them in the appropriate folder in addition to meeting the requirements
+        listed in the "requirements.txt" file.
+    Upon completion of installation instructions, it is recommended to restart the machine, especially if CUDA was installed to enable the GPU.
+    The model is not perfect and still in active development so it may require some platform/environment specific troubleshooting.
+    From experience, installing ffmpeg, visual studio, and NVIDIA's CUDA can be points of confusion but they are addressed in the example.
+    The following link is to a video that, although not the most professional, provides a step-by-step guide to installing
+        and running Deep-Live-Cam for Windows 11: https://youtu.be/f5DA7LYCoPQ?si=FnNvqV9nuUMxMrRn&t=123
 
 Using the Model:
-As mentioned earlier, the model can be run in two modes. Commands for each are available in the "README" file instructions.
-Once the program is running, a GUI will appear after ten or so seconds. 
-Key components include:
-  - Keep fps: maintain framerate of target video
-  - Face Enhancer: improves output video quality
-  - Select a face: image that will be overlayed on the target
-  - Select a target: image or video that will be manipulated 
-  - Start: will begin the process of overlaying one image onto another image or video
-  - Live: will overlay image onto live feed from selected source (laptop camera, OBS virtual camera, etc.)
-If creating a static video (not using video feed for real-time alteration), the user will be prompted to select a directory within which to store 
-      the output.
+    As mentioned earlier, the model can be run in two modes. Commands for each are available in the "README" file instructions.
+    Once the program is running, a GUI will appear after ten or so seconds. 
 
-* We did not test the paid version of the model; it may be the case that performance is much better since it claims to improve quality
-    and user experience.
+    Key components include:
+    - Keep fps: maintain framerate of target video
+    - Face Enhancer: improves output video quality
+    - Select a face: image that will be overlayed on the target
+    - Select a target: image or video that will be manipulated 
+    - Start: will begin the process of overlaying one image onto another image or video
+    - Live: will overlay image onto live feed from selected source (laptop camera, OBS virtual camera, etc.)
+    If creating a static video (not using video feed for real-time alteration), the user will be prompted to select a directory within which to store 
+        the output.
+
+    * We did not test the paid version of the model; it may be the case that performance is much better since it claims to improve quality
+        and user experience.
