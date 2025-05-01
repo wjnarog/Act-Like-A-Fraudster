@@ -105,7 +105,7 @@ Linux/Mac<br>
 
 ## Running the Website
 Open two terminals <br>
-Navigate to /Hosting_Isaac in both terminals<br>
+Navigate to /Webpage in both terminals<br>
 In the first one, run <br>
 	`node server.js`<br>
 And verify that the output is something like<br>
